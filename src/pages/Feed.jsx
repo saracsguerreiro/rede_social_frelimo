@@ -252,14 +252,6 @@ export default function Feed({ setPage }) {
             <CheckCircle size={14} style={{ display: 'inline', marginRight: 7, verticalAlign: 'middle' }} />{toast}
           </div>
         )}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
-          {[{ v: naoLidas, l: 'Por ler', c: 'var(--red-600)' }, { v: posts.length, l: 'Este mês', c: 'var(--green-600)' }, { v: 2, l: 'Presença pendente', c: 'var(--black)' }].map(s => (
-            <div key={s.l} style={{ flex: 1, background: 'var(--white)', borderRadius: 16, padding: '14px 16px', border: '1px solid var(--gray-200)', borderTop: `4px solid ${s.c}` }}>
-              <div style={{ fontSize: 22, fontWeight: 800, color: s.c }}>{s.v}</div>
-              <div style={{ fontSize: 11, color: 'var(--gray-600)', marginTop: 2 }}>{s.l}</div>
-            </div>
-          ))}
-        </div>
         <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
           {['Todos', 'Por ler', 'Circulares', 'Convocatórias'].map((f, i) => (
             <button key={f} className={`filter-chip${i === 0 ? ' active' : ''}`}>{f}</button>
