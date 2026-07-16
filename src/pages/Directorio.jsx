@@ -27,7 +27,7 @@ export default function Directorio({ setPage }) {
   const myDirList = militantes.filter(m => myDir.has(m.id));
 
   return (
-    <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
 
       {/* Centro */}
       <div style={{ flex: 1, minWidth: 0 }}>

@@ -120,7 +120,7 @@ export default function Eventos({ setPage }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
 
       {/* Centro — Calendário */}
       <div style={{ flex: 1, minWidth: 0 }}>

@@ -244,7 +244,7 @@ export default function Feed({ setPage }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start', maxWidth: 1300 }}>
+    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start', maxWidth: 1300 }}>
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {toast && (

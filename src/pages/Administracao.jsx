@@ -14,7 +14,7 @@ const KPICard = ({ label, valor, sub, cor, icon: Icon }) => (
 
 export default function Administracao({ setPage }) {
   return (
-    <div style={{ padding: '24px', maxWidth: 980 }}>
+    <div style={{ padding: '28px 32px', maxWidth: 980 }}>
       {/* Warning bar */}
       <div style={{ padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 24, display: 'flex', gap: 8, alignItems: 'center' }}>
         <Shield size={16} color="var(--black)" />
