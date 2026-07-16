@@ -33,7 +33,7 @@ export default function App() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <TopBar page={page} />
         <main style={{ flex: 1, overflowY: 'auto' }}>
-          <PageComponent />
+          <PageComponent setPage={setPage} />
         </main>
       </div>
     </div>

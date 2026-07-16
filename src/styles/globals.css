@@ -84,7 +84,7 @@ ul { list-style: none; }
 .card {
   background: var(--white);
   border: 1px solid var(--gray-200);
-  border-radius: 6px;
+  border-radius: 16px;
   padding: 20px;
 }
 
