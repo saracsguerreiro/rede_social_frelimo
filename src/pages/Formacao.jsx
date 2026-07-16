@@ -7,12 +7,12 @@ const nivelColors = {
   'Avançado': { bg: 'var(--red-50)', color: 'var(--red-800)' },
 };
 
-export default function Formacao({ setPage }) {
+export default function Formacao({ setPage, mobile }) {
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
       {/* Centro */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {/* Progress overview */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
           {[
@@ -36,7 +36,7 @@ export default function Formacao({ setPage }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 14 }}>
           {cursos.map(curso => {
             const pct = Math.round((curso.concluidos / curso.modulos) * 100);
             const nc = nivelColors[curso.nivel];
@@ -80,7 +80,7 @@ export default function Formacao({ setPage }) {
       </div>
 
       {/* Coluna direita — Consulta rápida */}
-      <div style={{ width: 260, flexShrink: 0 }}>
+      {!mobile && <div style={{ width: 260, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header">
             <div className="widget-title"><Zap size={14} color="var(--yellow)" fill="var(--yellow)" />Consulta Rápida</div>
@@ -123,6 +123,7 @@ export default function Formacao({ setPage }) {
           ))}
         </div>
       </div>
+      }
     </div>
   );
 }

@@ -65,7 +65,7 @@ function ReadStatus({ lida }) {
   );
 }
 
-export default function Mensagens({ setPage }) {
+export default function Mensagens({ setPage, mobile }) {
   const [activa, setActiva] = useState(conversas[0]);
   const [texto, setTexto] = useState('');
   const [msgs, setMsgs] = useState(mensagensAtivas);
@@ -76,7 +76,7 @@ export default function Mensagens({ setPage }) {
   const [pinnedDismissed, setPinnedDismissed] = useState(false);
   const [hoveredMsgId, setHoveredMsgId] = useState(null);
   const [pickerMsgId, setPickerMsgId] = useState(null);
-  const [msgsState, setMsgsState] = useState({});
+  const [showMobileChat, setShowMobileChat] = useState(false);
 
   function enviar() {
     if (!texto.trim()) return;
@@ -114,6 +114,8 @@ export default function Mensagens({ setPage }) {
   const activaOnline = activa?.tipo === 'direto' &&
     conversas.find(c => c.id === activa?.id)?.online;
 
+  const navToChat = (c) => { setActiva(c); if (mobile) setShowMobileChat(true); };
+
   return (
     <>
       <style>{`
@@ -123,10 +125,10 @@ export default function Mensagens({ setPage }) {
         }
       `}</style>
 
-      <div style={{ display: 'flex', height: 'calc(100vh - 58px)', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', height: mobile ? 'calc(100vh - 150px)' : 'calc(100vh - 58px)', overflow: 'hidden' }}>
 
         {/* ── Painel esquerdo ── */}
-        <div style={{ width: 300, borderRight: '1px solid var(--gray-200)', background: 'var(--white)', display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
+        <div style={{ width: mobile ? '100%' : 300, borderRight: mobile ? 'none' : '1px solid var(--gray-200)', background: 'var(--white)', display: mobile && showMobileChat ? 'none' : 'flex', flexDirection: 'column', flexShrink: 0 }}>
           {/* Header */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--gray-200)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
@@ -180,7 +182,7 @@ export default function Mensagens({ setPage }) {
                 {convsFiltradas.map(c => (
                   <div
                     key={c.id}
-                    onClick={() => setActiva(c)}
+                    onClick={() => navToChat(c)}
                     style={{
                       padding: '11px 16px', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
                       background: activa?.id === c.id ? 'var(--red-50)' : 'transparent',
@@ -246,7 +248,7 @@ export default function Mensagens({ setPage }) {
         </div>
 
         {/* ── Área de chat ── */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--gray-100)', overflow: 'hidden' }}>
+        <div style={{ flex: 1, display: mobile && !showMobileChat ? 'none' : 'flex', flexDirection: 'column', background: 'var(--gray-100)', overflow: 'hidden' }}>
 
           {/* Barra de mensagem fixada */}
           {!pinnedDismissed && (
@@ -262,7 +264,10 @@ export default function Mensagens({ setPage }) {
           )}
 
           {/* Header da conversa */}
-          <div style={{ padding: '12px 20px', background: 'var(--white)', borderBottom: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          <div style={{ padding: '10px 14px', background: 'var(--white)', borderBottom: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', gap: mobile ? 8 : 12, flexShrink: 0 }}>
+            {mobile && (
+              <button onClick={() => setShowMobileChat(false)} style={{ background: 'none', border: 'none', color: 'var(--red-600)', fontSize: 20, cursor: 'pointer', padding: '0 4px', lineHeight: 1, flexShrink: 0 }}>‹</button>
+            )}
             <div style={{ position: 'relative', flexShrink: 0 }}>
               <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'var(--green-600)', color: 'var(--white)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 12 }}>{activa?.avatar}</div>
               {activaOnline && (
@@ -279,10 +284,10 @@ export default function Mensagens({ setPage }) {
               </div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ fontSize: 11, color: 'var(--gray-400)', display: 'flex', alignItems: 'center', gap: 3, marginRight: 8 }}>
+              {!mobile && <span style={{ fontSize: 11, color: 'var(--gray-400)', display: 'flex', alignItems: 'center', gap: 3, marginRight: 8 }}>
                 {activa?.tipo === 'grupo' ? <Users size={13} /> : <User size={13} />}
                 {activa?.tipo === 'grupo' ? 'Grupo' : 'Directo'}
-              </span>
+              </span>}
               {[
                 { icon: <Clock size={16} />, title: 'Mensagem agendada' },
                 { icon: <Phone size={16} />, title: 'Chamada de voz' },

@@ -8,7 +8,7 @@ const GRUPOS = [
   { key: 'organizacao',  label: 'Organizações',  cor: 'var(--gray-600)' },
 ];
 
-export default function Espacos({ setPage }) {
+export default function Espacos({ setPage, mobile }) {
   const [busca, setBusca] = useState('');
   const [joinedIds, setJoinedIds] = useState(new Set(mySpaces.map(s => s.id)));
   const [vistaDir, setVistaDir] = useState('todos'); // 'meus' | 'todos'
@@ -29,7 +29,7 @@ export default function Espacos({ setPage }) {
   const listaParaMostrar = vistaDir === 'meus' ? espacosMeus : espacosFiltrados;
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
       {/* ── Centro — Os meus espaços ── */}
       <div style={{ flex: 1, minWidth: 0 }}>
@@ -79,7 +79,7 @@ export default function Espacos({ setPage }) {
       </div>
 
       {/* ── Coluna direita — Espaços com grupos ── */}
-      <div style={{ width: 290, flexShrink: 0 }}>
+      <div style={{ width: mobile ? '100%' : 290, flexShrink: 0 }}>
         <div className="widget">
           {/* Header da coluna */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--gray-200)' }}>

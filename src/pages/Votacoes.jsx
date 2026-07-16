@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CheckCircle, Clock, Lock, Users, TrendingUp, Award } from 'lucide-react';
 import { votacoes as initialVotacoes } from '../data/mockData';
 
-export default function Votacoes({ setPage }) {
+export default function Votacoes({ setPage, mobile }) {
   const [votacoes, setVotacoes] = useState(initialVotacoes);
   const [myVotes, setMyVotes] = useState({ 2: 'a', 3: 'a' });
 
@@ -20,9 +20,9 @@ export default function Votacoes({ setPage }) {
   const ultimasEncerradas = encerradas.slice(-3);
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {/* Abertas */}
         {abertas.length > 0 && (
           <>
@@ -146,7 +146,7 @@ export default function Votacoes({ setPage }) {
       </div>
 
       {/* Coluna direita */}
-      <div style={{ width: 260, flexShrink: 0 }}>
+      {!mobile && <div style={{ width: 260, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header"><div className="widget-title"><TrendingUp size={14} color="var(--red-600)" />Resumo de Votações</div></div>
           <div style={{ padding: '14px 16px' }}>
@@ -181,6 +181,7 @@ export default function Votacoes({ setPage }) {
           ))}
         </div>
       </div>
+      }
     </div>
   );
 }

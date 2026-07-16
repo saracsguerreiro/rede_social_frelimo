@@ -12,9 +12,9 @@ const KPICard = ({ label, valor, sub, cor, icon: Icon }) => (
   </div>
 );
 
-export default function Administracao({ setPage }) {
+export default function Administracao({ setPage, mobile }) {
   return (
-    <div style={{ padding: '28px 32px', maxWidth: 980 }}>
+    <div style={{ padding: mobile ? '14px 12px' : '28px 32px', maxWidth: 980 }}>
       {/* Warning bar */}
       <div style={{ padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 24, display: 'flex', gap: 8, alignItems: 'center' }}>
         <Shield size={16} color="var(--black)" />
@@ -22,7 +22,7 @@ export default function Administracao({ setPage }) {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 28 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: 14, marginBottom: 28 }}>
         <KPICard label="Militantes activos" valor={statsAdmin.militantesActivos.toLocaleString('pt-PT')} sub="Na plataforma este mês" cor="var(--red-600)" icon={Users} />
         <KPICard label="Quotas em dia" valor={statsAdmin.quotasEmDia} sub="78% dos militantes" cor="var(--green-600)" icon={CheckCircle} />
         <KPICard label="Células activas" valor={statsAdmin.celulasActivas} sub="Com espaço activo" cor="var(--yellow)" icon={TrendingUp} />
@@ -31,7 +31,7 @@ export default function Administracao({ setPage }) {
         <KPICard label="Tempo de difusão" valor={statsAdmin.tempoDifusao} sub="Sede → células (média)" cor="var(--black)" icon={TrendingUp} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 16 }}>
         {/* KPI target */}
         <div className="card">
           <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>KPIs do Piloto — Mês 12</h3>
@@ -87,7 +87,7 @@ export default function Administracao({ setPage }) {
         {/* Governance rules */}
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Regras Estatutárias — Estado de Cumprimento</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: 12 }}>
             {[
               { regra: 'Dono institucional único nomeado', ok: true },
               { regra: 'Estatuto interno publicado', ok: true },

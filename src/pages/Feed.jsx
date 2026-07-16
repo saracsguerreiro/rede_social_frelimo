@@ -234,9 +234,8 @@ function RightColumn({ setPage }) {
   );
 }
 
-export default function Feed({ setPage }) {
+export default function Feed({ setPage, mobile }) {
   const [toast, setToast] = useState(null);
-  const naoLidas = posts.filter(p => !p.lida).length;
 
   function handleAddToDirectory(autor) {
     setToast(`${autor.nome} adicionado ao seu directório.`);
@@ -244,23 +243,23 @@ export default function Feed({ setPage }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start', maxWidth: 1300 }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', maxWidth: 1300, flexDirection: mobile ? 'column' : 'row' }}>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {toast && (
-          <div style={{ position: 'fixed', bottom: 24, right: 24, background: 'var(--green-600)', color: 'var(--white)', padding: '12px 20px', borderRadius: 50, fontSize: 13, fontWeight: 600, zIndex: 999, boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
+          <div style={{ position: 'fixed', bottom: mobile ? 74 : 24, right: 16, background: 'var(--green-600)', color: 'var(--white)', padding: '12px 20px', borderRadius: 50, fontSize: 13, fontWeight: 600, zIndex: 999, boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <CheckCircle size={14} style={{ display: 'inline', marginRight: 7, verticalAlign: 'middle' }} />{toast}
           </div>
         )}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 14, overflowX: 'auto', paddingBottom: 2 }}>
           {['Todos', 'Por ler', 'Circulares', 'Convocatórias'].map((f, i) => (
-            <button key={f} className={`filter-chip${i === 0 ? ' active' : ''}`}>{f}</button>
+            <button key={f} className={`filter-chip${i === 0 ? ' active' : ''}`} style={{ flexShrink: 0 }}>{f}</button>
           ))}
         </div>
         {posts.map(post => <PostCard key={post.id} post={post} onAddToDirectory={handleAddToDirectory} />)}
       </div>
 
-      <RightColumn setPage={setPage} />
+      {!mobile && <RightColumn setPage={setPage} />}
     </div>
   );
 }

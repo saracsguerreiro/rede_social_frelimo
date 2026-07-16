@@ -11,7 +11,7 @@ const tipoColors = {
   'Relatório': { bg: '#FEF3C7', color: '#92400E' },
 };
 
-export default function Documentos({ setPage }) {
+export default function Documentos({ setPage, mobile }) {
   const [busca, setBusca] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('Todos');
 
@@ -22,10 +22,10 @@ export default function Documentos({ setPage }) {
   });
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
       {/* Centro */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {/* Search + action */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', borderRadius: 50, padding: '0 16px', border: '1.5px solid var(--gray-200)' }}>
@@ -42,52 +42,79 @@ export default function Documentos({ setPage }) {
           ))}
         </div>
 
-        {/* Table */}
-        <div style={{ background: 'var(--white)', borderRadius: 20, border: '1px solid var(--gray-200)', overflow: 'hidden' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr style={{ background: 'var(--gray-100)', borderBottom: '2px solid var(--gray-200)' }}>
-                {['Documento', 'Tipo', 'Órgão', 'Data', 'Tamanho', ''].map(h => (
-                  <th key={h} style={{ padding: '11px 16px', textAlign: 'left', fontSize: 10, fontWeight: 700, color: 'var(--gray-600)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtrados.map((doc, i) => {
-                const tc = tipoColors[doc.tipo] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
-                return (
-                  <tr key={doc.id} style={{ borderBottom: '1px solid var(--gray-200)' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-100)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    <td style={{ padding: '12px 16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ width: 32, height: 32, background: 'var(--red-50)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          <FileText size={14} color="var(--red-600)" />
+        {/* Table / card view */}
+        {mobile ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {filtrados.map(doc => {
+              const tc = tipoColors[doc.tipo] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
+              return (
+                <div key={doc.id} style={{ background: 'var(--white)', borderRadius: 16, border: '1px solid var(--gray-200)', padding: '14px 16px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div style={{ width: 36, height: 36, background: 'var(--red-50)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FileText size={16} color="var(--red-600)" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4, lineHeight: 1.3 }}>{doc.titulo}</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 8 }}>
+                      <span className="badge" style={{ background: tc.bg, color: tc.color }}>{doc.tipo}</span>
+                      <span style={{ fontSize: 10, color: 'var(--gray-400)' }}>{doc.data} · {doc.tamanho}</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--gray-500)', marginBottom: 8 }}>{doc.orgao}</div>
+                    <button className="btn-ghost" style={{ padding: '6px 14px', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Download size={12} />Descarregar
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+            {filtrados.length === 0 && <div className="empty-state">Nenhum documento encontrado.</div>}
+          </div>
+        ) : (
+          <div style={{ background: 'var(--white)', borderRadius: 20, border: '1px solid var(--gray-200)', overflow: 'hidden' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: 'var(--gray-100)', borderBottom: '2px solid var(--gray-200)' }}>
+                  {['Documento', 'Tipo', 'Órgão', 'Data', 'Tamanho', ''].map(h => (
+                    <th key={h} style={{ padding: '11px 16px', textAlign: 'left', fontSize: 10, fontWeight: 700, color: 'var(--gray-600)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtrados.map((doc, i) => {
+                  const tc = tipoColors[doc.tipo] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
+                  return (
+                    <tr key={doc.id} style={{ borderBottom: '1px solid var(--gray-200)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-100)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <td style={{ padding: '12px 16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ width: 32, height: 32, background: 'var(--red-50)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <FileText size={14} color="var(--red-600)" />
+                          </div>
+                          <span style={{ fontSize: 13, fontWeight: 600 }}>{doc.titulo}</span>
                         </div>
-                        <span style={{ fontSize: 13, fontWeight: 600 }}>{doc.titulo}</span>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px 16px' }}><span className="badge" style={{ background: tc.bg, color: tc.color }}>{doc.tipo}</span></td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-600)' }}>{doc.orgao}</td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-600)' }}>{doc.data}</td>
-                    <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-400)' }}>{doc.tamanho}</td>
-                    <td style={{ padding: '12px 16px' }}>
-                      <button className="btn-ghost" style={{ padding: '6px 14px', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <Download size={12} />Descarregar
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {filtrados.length === 0 && <div className="empty-state">Nenhum documento encontrado.</div>}
-        </div>
+                      </td>
+                      <td style={{ padding: '12px 16px' }}><span className="badge" style={{ background: tc.bg, color: tc.color }}>{doc.tipo}</span></td>
+                      <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-600)' }}>{doc.orgao}</td>
+                      <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-600)' }}>{doc.data}</td>
+                      <td style={{ padding: '12px 16px', fontSize: 12, color: 'var(--gray-400)' }}>{doc.tamanho}</td>
+                      <td style={{ padding: '12px 16px' }}>
+                        <button className="btn-ghost" style={{ padding: '6px 14px', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <Download size={12} />Descarregar
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {filtrados.length === 0 && <div className="empty-state">Nenhum documento encontrado.</div>}
+          </div>
+        )}
       </div>
 
       {/* Coluna direita — Documentos importantes */}
-      <div style={{ width: 260, flexShrink: 0 }}>
+      {!mobile && <div style={{ width: 260, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header">
             <div className="widget-title">
@@ -142,6 +169,7 @@ export default function Documentos({ setPage }) {
           </div>
         </div>
       </div>
+      }
     </div>
   );
 }

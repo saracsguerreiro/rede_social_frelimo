@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Search, MessageSquare, CheckCircle, AlertCircle, BookmarkPlus, BookmarkCheck, Users } from 'lucide-react';
 import { militantes, myDirectory as initialMyDir } from '../data/mockData';
 
-export default function Directorio({ setPage }) {
+export default function Directorio({ setPage, mobile }) {
   const [busca, setBusca] = useState('');
   const [filtroQuotas, setFiltroQuotas] = useState('todos');
   const [myDir, setMyDir] = useState(new Set(initialMyDir.map(d => d.id)));
@@ -27,10 +27,10 @@ export default function Directorio({ setPage }) {
   const myDirList = militantes.filter(m => myDir.has(m.id));
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
       {/* Centro */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {toast && (
           <div style={{ position: 'fixed', bottom: 24, right: 24, background: 'var(--green-600)', color: 'var(--white)', padding: '12px 20px', borderRadius: 50, fontSize: 13, fontWeight: 600, zIndex: 999, boxShadow: '0 4px 16px rgba(0,0,0,0.2)' }}>
             <CheckCircle size={14} style={{ display: 'inline', marginRight: 7, verticalAlign: 'middle' }} />{toast}
@@ -64,7 +64,7 @@ export default function Directorio({ setPage }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(auto-fill, minmax(250px, 1fr))', gap: 12 }}>
           {filtrados.map(m => (
             <div key={m.id} style={{ background: 'var(--white)', borderRadius: 20, border: '1px solid var(--gray-200)', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ display: 'flex', gap: 12 }}>
@@ -96,7 +96,7 @@ export default function Directorio({ setPage }) {
       </div>
 
       {/* Coluna direita — O meu directório */}
-      <div style={{ width: 260, flexShrink: 0 }}>
+      {!mobile && <div style={{ width: 260, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header">
             <div className="widget-title"><Users size={14} color="var(--red-600)" />O Meu Directório</div>
@@ -119,6 +119,7 @@ export default function Directorio({ setPage }) {
           </div>
         </div>
       </div>
+      }
     </div>
   );
 }

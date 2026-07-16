@@ -98,7 +98,7 @@ function Calendar({ year, month, eventos, onSelectDay, selectedDay }) {
   );
 }
 
-export default function Eventos({ setPage }) {
+export default function Eventos({ setPage, mobile }) {
   const [confirmados, setConfirmados] = useState(new Set(eventos.filter(e => e.confirmado).map(e => e.id)));
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -115,10 +115,10 @@ export default function Eventos({ setPage }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: mobile ? 0 : 32, padding: mobile ? '14px 12px' : '28px 32px', alignItems: 'flex-start', flexDirection: mobile ? 'column' : 'row' }}>
 
       {/* ── Centro ── */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ flex: 1, minWidth: 0, width: '100%' }}>
         {/* Stats */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
           <div style={{ flex: 1, background: 'var(--white)', borderRadius: 16, padding: '14px 16px', border: '1px solid var(--gray-200)', borderLeft: '4px solid var(--red-600)' }}>
@@ -198,7 +198,7 @@ export default function Eventos({ setPage }) {
       </div>
 
       {/* ── Coluna direita ── */}
-      <div style={{ width: 280, flexShrink: 0 }}>
+      {!mobile && <div style={{ width: 280, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header">
             <div className="widget-title">
@@ -277,6 +277,7 @@ export default function Eventos({ setPage }) {
           </div>
         </div>
       </div>
+      }
     </div>
   );
 }
