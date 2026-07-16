@@ -1,5 +1,4 @@
 import { BookOpen, Play, CheckCircle, Clock, ChevronRight, AlertTriangle, Zap } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 import { cursos, formacaoImportante } from '../data/mockData';
 
 const nivelColors = {
@@ -11,7 +10,6 @@ const nivelColors = {
 export default function Formacao({ setPage }) {
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
-      <LeftColumn page="formacao" setPage={setPage} />
 
       {/* Centro */}
       <div style={{ flex: 1, minWidth: 0 }}>

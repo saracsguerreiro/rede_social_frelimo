@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FileText, Download, Search, Star } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 import { documentos, importantDocs } from '../data/mockData';
 
 const tipoColors = {
@@ -24,7 +23,6 @@ export default function Documentos({ setPage }) {
 
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
-      <LeftColumn page="documentos" setPage={setPage} />
 
       {/* Centro */}
       <div style={{ flex: 1, minWidth: 0 }}>

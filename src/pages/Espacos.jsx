@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Users, FileText, TrendingUp, Search, Plus, Check, Bell } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 import { espacos, mySpaces } from '../data/mockData';
 
 export default function Espacos({ setPage }) {
@@ -11,7 +10,6 @@ export default function Espacos({ setPage }) {
 
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
-      <LeftColumn page="espacos" setPage={setPage} />
 
       {/* Centro — Os meus espaços */}
       <div style={{ flex: 1, minWidth: 0 }}>

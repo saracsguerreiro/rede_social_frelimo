@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { CheckCircle, Clock, Lock, Users, TrendingUp, Award } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 import { votacoes as initialVotacoes } from '../data/mockData';
 
 export default function Votacoes({ setPage }) {
@@ -21,7 +20,6 @@ export default function Votacoes({ setPage }) {
 
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
-      <LeftColumn page="votacoes" setPage={setPage} />
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {/* Abertas */}

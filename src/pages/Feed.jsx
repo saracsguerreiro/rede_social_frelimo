@@ -4,7 +4,6 @@ import {
   Megaphone, Bell, FileSignature, ChevronRight, CalendarDays,
   TrendingUp, UserPlus, Vote, MapPin, BookmarkPlus
 } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 
 const tipoConfig = {
   circular: { label: 'Circular', cor: 'var(--red-600)', bg: 'var(--red-50)', icon: FileSignature },
@@ -246,7 +245,6 @@ export default function Feed({ setPage }) {
 
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start', maxWidth: 1300 }}>
-      <LeftColumn page="feed" setPage={setPage} />
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {toast && (

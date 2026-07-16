@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Search, MessageSquare, CheckCircle, AlertCircle, BookmarkPlus, BookmarkCheck, Users } from 'lucide-react';
-import LeftColumn from '../components/LeftColumn';
 import { militantes, myDirectory as initialMyDir } from '../data/mockData';
 
 export default function Directorio({ setPage }) {
@@ -29,7 +28,6 @@ export default function Directorio({ setPage }) {
 
   return (
     <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
-      <LeftColumn page="directorio" setPage={setPage} />
 
       {/* Centro */}
       <div style={{ flex: 1, minWidth: 0 }}>
