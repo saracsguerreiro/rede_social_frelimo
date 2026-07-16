@@ -12,7 +12,7 @@ const KPICard = ({ label, valor, sub, cor, icon: Icon }) => (
   </div>
 );
 
-export default function Administracao() {
+export default function Administracao({ setPage }) {
   return (
     <div style={{ padding: '24px', maxWidth: 980 }}>
       {/* Warning bar */}

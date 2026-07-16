@@ -264,6 +264,30 @@ export const eventos = [
   { id: 5, titulo: 'Prazo: pagamento de quotas 2º trimestre', data: '2026-07-31', hora: null, local: null, tipo: 'prazo', confirmado: null },
 ];
 
+export const myDirectory = [
+  { id: 2, nome: 'Fátima Cossa', cargo: 'Membro do CC', orgao: 'CC', avatar: 'FC', online: true },
+  { id: 3, nome: 'João Nhantumbo', cargo: 'Sec. Distrital', orgao: 'CD Matola', avatar: 'JN', online: false },
+  { id: 5, nome: 'Carlos Mondlane Jr.', cargo: 'Sec.-Geral OJM', orgao: 'OJM Nacional', avatar: 'CM', online: true },
+];
+
+export const importantDocs = [
+  { id: 1, titulo: 'Estatuto do Partido FRELIMO — Rev. 2024', tipo: 'Estatuto', data: '2024-02-15' },
+  { id: 2, titulo: 'Programa de Acção 2024–2029', tipo: 'Programa', data: '2024-03-01' },
+  { id: 3, titulo: 'Directrizes para Células — 2026', tipo: 'Directriz', data: '2026-07-10' },
+];
+
+export const mySpaces = [
+  { id: 3, nome: 'CP Maputo', icone: 'MP', cor: 'var(--green-600)', membros: 87, naoLidas: 5 },
+  { id: 1, nome: 'Comité Central', icone: 'CC', cor: 'var(--red-600)', membros: 120, naoLidas: 2 },
+  { id: 5, nome: 'OJM Nacional', icone: 'OJ', cor: 'var(--red-800)', membros: 340, naoLidas: 0 },
+];
+
+export const formacaoImportante = [
+  { titulo: 'Estatuto do Partido — módulo obrigatório', prazo: '31 Jul', urgente: true },
+  { titulo: 'Gestão de Órgãos Partidários', prazo: '15 Ago', urgente: false },
+  { titulo: 'Directrizes para Células 2026', prazo: null, urgente: false },
+];
+
 export const statsAdmin = {
   militantesActivos: 4821,
   quotasEmDia: '78%',

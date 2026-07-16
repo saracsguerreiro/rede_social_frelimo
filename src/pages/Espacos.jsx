@@ -1,97 +1,97 @@
-import { Users, FileText, TrendingUp } from 'lucide-react';
-import { espacos } from '../data/mockData';
+import { useState } from 'react';
+import { Users, FileText, TrendingUp, Search, Plus, Check, Bell } from 'lucide-react';
+import LeftColumn from '../components/LeftColumn';
+import { espacos, mySpaces } from '../data/mockData';
 
-const nivelLabel = {
-  nacional: { label: 'Nacional', cor: 'var(--red-600)', bg: 'var(--red-50)' },
-  provincial: { label: 'Provincial', cor: 'var(--green-600)', bg: 'var(--green-50)' },
-  distrital: { label: 'Distrital', cor: '#6B7280', bg: 'var(--gray-100)' },
-  organizacao: { label: 'Organização', cor: '#7C3AED', bg: '#F3E8FF' },
-};
+export default function Espacos({ setPage }) {
+  const [busca, setBusca] = useState('');
+  const [joinedIds, setJoinedIds] = useState(new Set(mySpaces.map(s => s.id)));
 
-const hierarquia = ['nacional', 'provincial', 'distrital', 'organizacao'];
-
-export default function Espacos() {
-  const grupos = hierarquia.reduce((acc, nivel) => {
-    const items = espacos.filter(e => e.nivel === nivel);
-    if (items.length) acc[nivel] = items;
-    return acc;
-  }, {});
+  const todosEspacos = espacos.filter(e => !busca || e.nome.toLowerCase().includes(busca.toLowerCase()));
 
   return (
-    <div style={{ padding: '24px', maxWidth: 900 }}>
-      {/* Hierarchy diagram */}
-      <div className="card" style={{ marginBottom: 24, padding: '16px 20px', background: 'var(--black)', border: 'none' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 0, fontSize: 12, fontWeight: 600 }}>
-          {['Comité Central', 'Província', 'Distrito', 'Célula'].map((label, i) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{
-                padding: '6px 14px', borderRadius: 4,
-                background: i === 0 ? 'var(--red-600)' : i === 1 ? 'var(--green-600)' : i === 2 ? 'var(--gray-600)' : 'var(--gray-400)',
-                color: 'var(--white)', fontSize: 11,
-              }}>{label}</div>
-              {i < 3 && <div style={{ width: 24, height: 2, background: 'rgba(255,255,255,0.3)' }} />}
-            </div>
-          ))}
-          <div style={{ marginLeft: 'auto', fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>Estrutura orgânica da plataforma</div>
-        </div>
-      </div>
+    <div style={{ display: 'flex', gap: 18, padding: '22px', alignItems: 'flex-start' }}>
+      <LeftColumn page="espacos" setPage={setPage} />
 
-      {Object.entries(grupos).map(([nivel, items]) => {
-        const config = nivelLabel[nivel];
-        return (
-          <div key={nivel} style={{ marginBottom: 32 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-              <div style={{ height: 3, width: 24, background: config.cor, borderRadius: 2 }} />
-              <h2 style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: config.cor }}>
-                {config.label}
-              </h2>
+      {/* Centro — Os meus espaços */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+          <h2 style={{ fontSize: 16, fontWeight: 800 }}>Os Meus Espaços</h2>
+          <span style={{ fontSize: 12, color: 'var(--gray-400)' }}>{mySpaces.length} espaços</span>
+        </div>
+
+        {mySpaces.map(e => (
+          <div key={e.id} style={{ background: 'var(--white)', borderRadius: 20, border: '1px solid var(--gray-200)', marginBottom: 14, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+            {/* Header */}
+            <div style={{ padding: '16px 20px', background: `linear-gradient(135deg, ${e.cor}22, ${e.cor}08)`, borderBottom: '1px solid var(--gray-200)', display: 'flex', gap: 12, alignItems: 'center' }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: e.cor, color: 'var(--white)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>{e.icone}</div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontSize: 15, fontWeight: 800, marginBottom: 3 }}>{e.nome}</h3>
+                <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'var(--gray-500)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Users size={11} />{e.membros} membros</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><TrendingUp size={11} color="var(--green-600)" /><span style={{ color: 'var(--green-600)', fontWeight: 600 }}>{e.naoLidas} novas</span></span>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button style={{ padding: '6px 14px', background: 'var(--white)', borderRadius: 50, border: `1.5px solid ${e.cor}`, color: e.cor, fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Bell size={11} />Notificações
+                </button>
+                <button style={{ padding: '6px 14px', background: e.cor, borderRadius: 50, color: 'var(--white)', fontSize: 11, fontWeight: 700 }}>
+                  Entrar no Espaço
+                </button>
+              </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
-              {items.map(e => (
-                <div key={e.id} className="card" style={{ padding: 0, cursor: 'pointer', transition: 'border-color 0.15s' }}
-                  onMouseEnter={el => el.currentTarget.style.borderColor = config.cor}
-                  onMouseLeave={el => el.currentTarget.style.borderColor = 'var(--gray-200)'}
-                >
-                  <div style={{ padding: '16px', borderBottom: '1px solid var(--gray-200)', display: 'flex', gap: 12 }}>
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 6,
-                      background: e.cor === 'red' ? 'var(--red-600)' : 'var(--green-600)',
-                      color: 'var(--white)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontWeight: 800, fontSize: 13, flexShrink: 0,
-                    }}>{e.icone}</div>
-                    <div>
-                      <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>{e.nome}</h3>
-                      <span className="badge" style={{ background: config.bg, color: config.cor }}>{config.label}</span>
-                    </div>
-                  </div>
-                  <div style={{ padding: '12px 16px' }}>
-                    <p style={{ fontSize: 12, color: 'var(--gray-600)', marginBottom: 12 }}>{e.descricao}</p>
-                    <div style={{ display: 'flex', gap: 16 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--gray-600)' }}>
-                        <Users size={12} />{e.membros} membros
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--green-600)' }}>
-                        <TrendingUp size={12} />{e.activos} activos
-                      </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--gray-400)' }}>
-                        <FileText size={12} />{e.publicacoes}
-                      </div>
-                    </div>
-                    <div style={{ marginTop: 10, height: 4, background: 'var(--gray-200)', borderRadius: 2 }}>
-                      <div style={{ width: `${(e.activos / e.membros) * 100}%`, height: '100%', background: config.cor, borderRadius: 2 }} />
-                    </div>
-                  </div>
-                  <div style={{ padding: '0 16px 12px' }}>
-                    <button className="btn-primary" style={{ width: '100%', padding: '8px', fontSize: 12, background: config.cor }}>
-                      Entrar no Espaço
-                    </button>
+            {/* Mock posts */}
+            <div style={{ padding: '0' }}>
+              {[
+                { autor: 'Secretária', texto: 'Acta da reunião de 15 de Julho publicada nos documentos.', hora: '2h' },
+                { autor: 'Dep. Organização', texto: 'Novas directrizes para células disponíveis na secção Documentos.', hora: '1d' },
+              ].map((p, i) => (
+                <div key={i} style={{ padding: '12px 20px', borderBottom: i === 0 ? '1px solid var(--gray-200)' : 'none', display: 'flex', gap: 10 }}>
+                  <div style={{ width: 32, height: 32, borderRadius: '50%', background: e.cor, color: 'var(--white)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, flexShrink: 0 }}>{e.icone[0]}</div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, marginBottom: 2 }}>{p.autor} <span style={{ fontWeight: 400, color: 'var(--gray-400)' }}>· {p.hora}</span></div>
+                    <div style={{ fontSize: 12, color: 'var(--gray-600)' }}>{p.texto}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
+
+      {/* Coluna direita — Todos os espaços */}
+      <div style={{ width: 280, flexShrink: 0 }}>
+        <div className="widget">
+          <div className="widget-header" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 800 }}>Todos os Espaços</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--gray-100)', borderRadius: 50, padding: '7px 14px', border: '1.5px solid var(--gray-200)' }}>
+              <Search size={12} color="var(--gray-400)" />
+              <input value={busca} onChange={e => setBusca(e.target.value)} placeholder="Pesquisar espaço..." style={{ border: 'none', background: 'none', outline: 'none', fontSize: 12, width: '100%' }} />
+            </div>
+          </div>
+          <div style={{ padding: '6px 0', maxHeight: 420, overflowY: 'auto' }}>
+            {todosEspacos.map(e => {
+              const joined = joinedIds.has(e.id);
+              return (
+                <div key={e.id} style={{ padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 10, borderBottom: '1px solid var(--gray-200)' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: e.cor === 'red' ? 'var(--red-600)' : 'var(--green-600)', color: 'var(--white)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, flexShrink: 0 }}>{e.icone}</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{e.nome}</div>
+                    <div style={{ fontSize: 10, color: 'var(--gray-400)' }}>{e.membros} membros</div>
+                  </div>
+                  <button
+                    onClick={() => setJoinedIds(prev => { const n = new Set(prev); joined ? n.delete(e.id) : n.add(e.id); return n; })}
+                    style={{ padding: '5px 10px', borderRadius: 50, fontSize: 10, fontWeight: 700, flexShrink: 0, background: joined ? 'var(--green-50)' : 'var(--red-50)', color: joined ? 'var(--green-700)' : 'var(--red-700)', border: `1px solid ${joined ? 'var(--green-200)' : 'var(--red-200)'}` }}
+                  >
+                    {joined ? <><Check size={10} style={{ display: 'inline', marginRight: 3 }} />Aderiu</> : <><Plus size={10} style={{ display: 'inline', marginRight: 3 }} />Aderir</>}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
