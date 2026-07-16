@@ -29,7 +29,7 @@ export default function Sidebar({ page, setPage, onLogout }) {
     }}>
       {/* Logo */}
       <div style={{ padding: '22px 22px 18px', borderBottom: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', gap: 13 }}>
-        <img src="/frelimo.png" alt="FRELIMO" style={{ width: 50, height: 50, objectFit: 'contain', flexShrink: 0, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.35))' }} />
+        <img src={`${import.meta.env.BASE_URL}frelimo.png`} alt="FRELIMO" style={{ width: 50, height: 50, objectFit: 'contain', flexShrink: 0, filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.35))' }} />
         <div>
           <div style={{ color: 'var(--white)', fontWeight: 900, fontSize: 18, lineHeight: 1.1, letterSpacing: 0.5 }}>FRELIMO</div>
           <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, fontWeight: 500, marginTop: 3 }}>Rede Interna</div>

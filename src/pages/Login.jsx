@@ -27,7 +27,7 @@ export default function Login({ onLogin }) {
           {/* Logo grande */}
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 36 }}>
             <img
-              src="/frelimo.png"
+              src={`${import.meta.env.BASE_URL}frelimo.png`}
               alt="FRELIMO"
               style={{ width: 120, height: 120, objectFit: 'contain', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.4))' }}
             />

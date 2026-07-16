@@ -22,11 +22,11 @@ const posts = [
   },
   {
     id: 2, tipo: 'convocatoria', prioridade: 'media',
-    autor: { nome: 'Daniel Chapo', cargo: 'Presidente da República · Sec.-Geral do Partido', foto: '/post-president.webp', avatar: 'DC', cor: 'var(--red-800)' },
+    autor: { nome: 'Daniel Chapo', cargo: 'Presidente da República · Sec.-Geral do Partido', foto: `${import.meta.env.BASE_URL}post-president.webp`, avatar: 'DC', cor: 'var(--red-800)' },
     titulo: 'Mensagem do Presidente do Partido',
     corpo: 'Camaradas militantes, a força da nossa organização reside na unidade e na disciplina. O FRELIMO cumpre 64 anos de existência comprometido com o povo moçambicano. Convido todos os quadros a participar activamente na sessão de formação política que decorrerá nos dias 22 e 23 de Julho em todas as províncias. A mobilização começa em cada um de nós.',
     data: 'Há 4 horas', lida: true, confirmados: null, total: null, likes: 218, comentarios: 45,
-    expandido: true, imagem: '/post-president.webp',
+    expandido: true, imagem: `${import.meta.env.BASE_URL}post-president.webp`,
   },
   {
     id: 3, tipo: 'comunicado', prioridade: 'normal',
@@ -34,7 +34,7 @@ const posts = [
     titulo: 'Actividade comunitária da OMM em Cabo Delgado',
     corpo: 'As militantes da OMM na província de Cabo Delgado desenvolveram mais uma acção de capacitação e apoio às comunidades rurais. 47 mulheres participaram em sessões de formação em saúde reprodutiva, empreendedorismo e direitos da mulher. O FRELIMO presente onde mais se precisa.',
     data: 'Ontem às 15:30', lida: true, confirmados: null, total: null, likes: 156, comentarios: 28,
-    expandido: false, imagem: '/post-women.jpeg',
+    expandido: false, imagem: `${import.meta.env.BASE_URL}post-women.jpeg`,
   },
   {
     id: 4, tipo: 'circular', prioridade: 'alta',
