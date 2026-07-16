@@ -95,36 +95,46 @@ export default function Documentos({ setPage }) {
               Documentos Importantes
             </div>
           </div>
-          <div style={{ padding: '8px 0' }}>
-            {importantDocs.map((d, i) => {
-              const tc = tipoColors[d.tipo] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
-              return (
-                <div key={d.id} style={{ padding: '12px 16px', borderBottom: i < importantDocs.length - 1 ? '1px solid var(--gray-200)' : 'none', cursor: 'pointer' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-100)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                >
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                    <div style={{ width: 32, height: 32, background: 'var(--red-50)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <FileText size={14} color="var(--red-600)" />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.4, marginBottom: 4 }}>{d.titulo}</div>
+
+          {importantDocs.map((d, i) => {
+            const tc = tipoColors[d.tipo] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
+            const borderCorMap = { 'Estatuto': 'var(--red-600)', 'Programa': 'var(--red-400)', 'Directriz': 'var(--green-600)' };
+            const borderCor = borderCorMap[d.tipo] || 'var(--gray-300)';
+            return (
+              <div key={d.id}
+                style={{ padding: '16px', borderBottom: i < importantDocs.length - 1 ? '1px solid var(--gray-200)' : 'none', cursor: 'pointer', borderLeft: `4px solid ${borderCor}` }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-50)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: 10 }}>
+                  <div style={{ width: 34, height: 34, background: tc.bg, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <FileText size={15} color={tc.color} />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.4, marginBottom: 5 }}>{d.titulo}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <span className="badge" style={{ background: tc.bg, color: tc.color }}>{d.tipo}</span>
+                      <span style={{ fontSize: 10, color: 'var(--gray-400)' }}>{d.data}</span>
                     </div>
                   </div>
-                  <button className="btn-ghost" style={{ width: '100%', marginTop: 10, padding: '6px', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-                    <Download size={11} />Descarregar
-                  </button>
                 </div>
-              );
-            })}
-          </div>
-          <div style={{ padding: '12px 16px', borderTop: '1px solid var(--gray-200)' }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--gray-600)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Acesso rápido</div>
+                <button className="btn-ghost" style={{ width: '100%', padding: '7px', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                  <Download size={11} />Descarregar
+                </button>
+              </div>
+            );
+          })}
+
+          <div style={{ padding: '14px 16px', borderTop: '2px solid var(--gray-200)', background: 'var(--gray-50)' }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--gray-500)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 }}>Acesso rápido por tipo</div>
             {['Estatuto', 'Programa', 'Directriz'].map(t => {
               const tc = tipoColors[t] || { bg: 'var(--gray-100)', color: 'var(--gray-600)' };
               return (
-                <button key={t} onClick={() => setFiltroTipo(t)} style={{ display: 'block', width: '100%', marginBottom: 6, padding: '7px 12px', borderRadius: 50, background: tc.bg, color: tc.color, fontSize: 12, fontWeight: 600, textAlign: 'left', border: 'none' }}>
+                <button key={t} onClick={() => setFiltroTipo(t)} style={{ display: 'flex', width: '100%', alignItems: 'center', gap: 8, marginBottom: 8, padding: '8px 12px', borderRadius: 50, background: tc.bg, color: tc.color, fontSize: 12, fontWeight: 700, textAlign: 'left', border: 'none', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                >
+                  <FileText size={12} color={tc.color} />
                   {t}s
                 </button>
               );

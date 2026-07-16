@@ -74,6 +74,7 @@ export const conversas = [
     ultima: 'Secretária: Acta da reunião de ontem publicada no espaço.',
     hora: '10:42',
     naoLidas: 3,
+    online: false,
   },
   {
     id: 2,
@@ -84,6 +85,7 @@ export const conversas = [
     ultima: 'Confirmado para amanhã, 14h.',
     hora: '09:15',
     naoLidas: 0,
+    online: true,
   },
   {
     id: 3,
@@ -94,6 +96,7 @@ export const conversas = [
     ultima: 'João Nhantumbo: Enviamos o relatório.',
     hora: 'Ontem',
     naoLidas: 7,
+    online: false,
   },
   {
     id: 4,
@@ -104,6 +107,7 @@ export const conversas = [
     ultima: 'Obrigado pela informação.',
     hora: 'Ontem',
     naoLidas: 0,
+    online: false,
   },
   {
     id: 5,
@@ -114,14 +118,48 @@ export const conversas = [
     ultima: 'Actividade confirmada para sábado.',
     hora: '14 Jul',
     naoLidas: 0,
+    online: false,
   },
 ];
 
 export const mensagensAtivas = [
-  { id: 1, autor: 'Fátima Cossa', avatar: 'FC', texto: 'Bom dia. Recebeu o relatório do mês de Junho?', hora: '09:00', proprio: false },
-  { id: 2, autor: 'Eu', avatar: 'AM', texto: 'Bom dia Fátima. Sim, recebi. Estou a analisar.', hora: '09:08', proprio: true },
-  { id: 3, autor: 'Fátima Cossa', avatar: 'FC', texto: 'Preciso da sua aprovação até quarta-feira para submeter ao CC.', hora: '09:10', proprio: false },
-  { id: 4, autor: 'Eu', avatar: 'AM', texto: 'Confirmado para amanhã, 14h.', hora: '09:15', proprio: true },
+  {
+    id: 1, tipo: 'texto',
+    autor: 'Fátima Cossa', avatar: 'FC',
+    texto: 'Bom dia. Recebeu o relatório do mês de Junho?',
+    hora: '09:00', proprio: false, reacoes: [],
+  },
+  {
+    id: 2, tipo: 'ficheiro',
+    autor: 'Fátima Cossa', avatar: 'FC',
+    nomeFicheiro: 'Relatorio_Junho_2026.pdf', tamanho: '2.4 MB',
+    hora: '09:02', proprio: false, reacoes: [],
+  },
+  {
+    id: 3, tipo: 'texto',
+    autor: 'Eu', avatar: 'AM',
+    texto: 'Bom dia Fátima. Sim, recebi. Estou a analisar com atenção.',
+    hora: '09:08', proprio: true, lida: true, reacoes: ['👍'],
+  },
+  {
+    id: 4, tipo: 'resposta',
+    autor: 'Fátima Cossa', avatar: 'FC',
+    citacao: { autor: 'Eu', texto: 'Bom dia Fátima. Sim, recebi. Estou a analisar com atenção.' },
+    texto: 'Preciso da sua aprovação até quarta-feira para submeter ao CC.',
+    hora: '09:10', proprio: false, reacoes: [],
+  },
+  {
+    id: 5, tipo: 'voz',
+    autor: 'Eu', avatar: 'AM',
+    duracao: '0:42',
+    hora: '09:12', proprio: true, lida: false, reacoes: [],
+  },
+  {
+    id: 6, tipo: 'texto',
+    autor: 'Eu', avatar: 'AM',
+    texto: 'Confirmado para amanhã, 14h.',
+    hora: '09:15', proprio: true, lida: true, reacoes: [],
+  },
 ];
 
 export const espacos = [
@@ -213,10 +251,44 @@ export const votacoes = [
     quorum: 60,
     votaram: 287,
     total: 340,
-    resultado: 'Aprovado — 94% a favor',
     opcoes: [
       { id: 'a', texto: 'Aprovado', votos: 270 },
       { id: 'b', texto: 'Rejeitado', votos: 17 },
+    ],
+    minhaVoto: 'a',
+  },
+  {
+    id: 4,
+    titulo: 'Eleição da Mesa da Sessão Extraordinária do CC',
+    descricao: 'Eleição dos membros da mesa para conduzir a sessão extraordinária do Comité Central de Junho de 2026.',
+    orgao: 'Comité Central',
+    estado: 'encerrada',
+    inicio: '2026-06-20',
+    fim: '2026-06-20',
+    quorum: 75,
+    votaram: 108,
+    total: 120,
+    opcoes: [
+      { id: 'a', texto: 'Lista A — proposta pelo Secretariado', votos: 92 },
+      { id: 'b', texto: 'Lista B — proposta alternativa', votos: 16 },
+    ],
+    minhaVoto: 'a',
+  },
+  {
+    id: 5,
+    titulo: 'Regulamento Interno de Comunicações Digitais',
+    descricao: 'Aprovação do regulamento que rege o uso desta plataforma e dos canais digitais do Partido.',
+    orgao: 'Secretariado',
+    estado: 'encerrada',
+    inicio: '2026-06-10',
+    fim: '2026-06-15',
+    quorum: 60,
+    votaram: 14,
+    total: 15,
+    opcoes: [
+      { id: 'a', texto: 'Aprovado', votos: 14 },
+      { id: 'b', texto: 'Rejeitado', votos: 0 },
+      { id: 'c', texto: 'Adiado para revisão', votos: 0 },
     ],
     minhaVoto: 'a',
   },
@@ -246,14 +318,14 @@ export const cursos = [
 ];
 
 export const militantes = [
-  { id: 1, nome: 'Américo Muteia', cartao: 'FREL-2019-047821', orgao: 'CP Maputo', cargo: 'Secretário Provincial', quotas: 'Em dia', avatar: 'AM' },
-  { id: 2, nome: 'Fátima Cossa', cartao: 'FREL-2015-012340', orgao: 'CC', cargo: 'Membro do CC', quotas: 'Em dia', avatar: 'FC' },
-  { id: 3, nome: 'João Nhantumbo', cartao: 'FREL-2021-089012', orgao: 'CD Matola', cargo: 'Secretário Distrital', quotas: 'Em dia', avatar: 'JN' },
-  { id: 4, nome: 'Maria Sitoe', cartao: 'FREL-2018-034567', orgao: 'CP Maputo', cargo: 'Secretária Adjunta', quotas: 'Pendente', avatar: 'MS' },
-  { id: 5, nome: 'Carlos Mondlane Jr.', cartao: 'FREL-2020-056789', orgao: 'OJM Nacional', cargo: 'Secretário-Geral OJM', quotas: 'Em dia', avatar: 'CM' },
-  { id: 6, nome: 'Rosa Baloi', cartao: 'FREL-2017-023456', orgao: 'OMM Nacional', cargo: 'Secretária-Geral OMM', quotas: 'Em dia', avatar: 'RB' },
-  { id: 7, nome: 'Helder Guambe', cartao: 'FREL-2022-101234', orgao: 'CD Boane', cargo: 'Secretário Distrital', quotas: 'Em dia', avatar: 'HG' },
-  { id: 8, nome: 'Ana Chambal', cartao: 'FREL-2016-019876', orgao: 'CP Gaza', cargo: 'Membro CP', quotas: 'Pendente', avatar: 'AC' },
+  { id: 1, nome: 'Américo Muteia', cartao: 'FREL-2019-047821', orgao: 'CP Maputo', cargo: 'Secretário Provincial', quotas: 'Em dia', avatar: 'AM', online: true },
+  { id: 2, nome: 'Fátima Cossa', cartao: 'FREL-2015-012340', orgao: 'CC', cargo: 'Membro do CC', quotas: 'Em dia', avatar: 'FC', online: true },
+  { id: 3, nome: 'João Nhantumbo', cartao: 'FREL-2021-089012', orgao: 'CD Matola', cargo: 'Secretário Distrital', quotas: 'Em dia', avatar: 'JN', online: false },
+  { id: 4, nome: 'Maria Sitoe', cartao: 'FREL-2018-034567', orgao: 'CP Maputo', cargo: 'Secretária Adjunta', quotas: 'Pendente', avatar: 'MS', online: false },
+  { id: 5, nome: 'Carlos Mondlane Jr.', cartao: 'FREL-2020-056789', orgao: 'OJM Nacional', cargo: 'Secretário-Geral OJM', quotas: 'Em dia', avatar: 'CM', online: true },
+  { id: 6, nome: 'Rosa Baloi', cartao: 'FREL-2017-023456', orgao: 'OMM Nacional', cargo: 'Secretária-Geral OMM', quotas: 'Em dia', avatar: 'RB', online: false },
+  { id: 7, nome: 'Helder Guambe', cartao: 'FREL-2022-101234', orgao: 'CD Boane', cargo: 'Secretário Distrital', quotas: 'Em dia', avatar: 'HG', online: false },
+  { id: 8, nome: 'Ana Chambal', cartao: 'FREL-2016-019876', orgao: 'CP Gaza', cargo: 'Membro CP', quotas: 'Pendente', avatar: 'AC', online: false },
 ];
 
 export const eventos = [

@@ -17,6 +17,7 @@ export default function Votacoes({ setPage }) {
 
   const abertas = votacoes.filter(v => v.estado === 'aberta');
   const encerradas = votacoes.filter(v => v.estado === 'encerrada');
+  const ultimasEncerradas = encerradas.slice(-3);
 
   return (
     <div style={{ display: 'flex', gap: 32, padding: '28px 32px', alignItems: 'flex-start' }}>
@@ -99,7 +100,7 @@ export default function Votacoes({ setPage }) {
           <Award size={15} color="var(--gray-600)" />
           <h2 style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--gray-600)' }}>Resultados das Últimas Votações</h2>
         </div>
-        {encerradas.map(v => {
+        {ultimasEncerradas.map(v => {
           const totalVotos = v.opcoes.reduce((s, o) => s + o.votos, 0) || 1;
           const vencedora = [...v.opcoes].sort((a, b) => b.votos - a.votos)[0];
           return (
