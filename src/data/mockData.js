@@ -336,6 +336,12 @@ export const eventos = [
   { id: 5, titulo: 'Prazo: pagamento de quotas 2º trimestre', data: '2026-07-31', hora: null, local: null, tipo: 'prazo', confirmado: null },
 ];
 
+export const eventosAnteriores = [
+  { id: 10, titulo: 'Reunião do Secretariado — Junho', data: '2026-06-28', hora: '10:00', local: 'Sede Nacional, Maputo', tipo: 'cc' },
+  { id: 11, titulo: 'Formação Política — Quadros Provinciais', data: '2026-06-14', hora: '09:00', local: 'CP Maputo, Av. Eduardo Mondlane', tipo: 'formacao' },
+  { id: 12, titulo: 'Assembleia Distrital de Matola', data: '2026-05-30', hora: '08:30', local: 'Matola, Sede Distrital', tipo: 'assembleia' },
+];
+
 export const myDirectory = [
   { id: 2, nome: 'Fátima Cossa', cargo: 'Membro do CC', orgao: 'CC', avatar: 'FC', online: true },
   { id: 3, nome: 'João Nhantumbo', cargo: 'Sec. Distrital', orgao: 'CD Matola', avatar: 'JN', online: false },

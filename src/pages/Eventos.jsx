@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Clock, MapPin, CheckCircle, Circle, ChevronLeft, ChevronRight, CalendarCheck } from 'lucide-react';
-import { eventos } from '../data/mockData';
+import { Clock, MapPin, CheckCircle, Circle, ChevronLeft, ChevronRight, CalendarCheck, History } from 'lucide-react';
+import { eventos, eventosAnteriores } from '../data/mockData';
 
 const tipoConfig = {
   cc:          { label: 'Comité Central', borda: 'var(--red-600)',   bg: 'var(--red-50)',   cor: 'var(--red-800)' },
@@ -197,7 +197,7 @@ export default function Eventos({ setPage }) {
         </div>
       </div>
 
-      {/* ── Coluna direita — Eventos confirmados ── */}
+      {/* ── Coluna direita ── */}
       <div style={{ width: 280, flexShrink: 0 }}>
         <div className="widget">
           <div className="widget-header">
@@ -241,6 +241,40 @@ export default function Eventos({ setPage }) {
               })}
             </div>
           )}
+        </div>
+
+        {/* Eventos anteriores */}
+        <div className="widget" style={{ marginTop: 16 }}>
+          <div className="widget-header">
+            <div className="widget-title">
+              <History size={14} color="var(--gray-500)" />
+              Eventos Anteriores
+            </div>
+          </div>
+          <div style={{ padding: '6px 0' }}>
+            {eventosAnteriores.map((e, i) => {
+              const tc = tipoConfig[e.tipo];
+              const d = new Date(e.data + 'T00:00:00');
+              return (
+                <div key={e.id} style={{ padding: '13px 16px', borderBottom: i < eventosAnteriores.length - 1 ? '1px solid var(--gray-200)' : 'none' }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <div style={{ width: 42, flexShrink: 0, textAlign: 'center', background: 'var(--gray-100)', borderRadius: 10, padding: '6px 4px' }}>
+                      <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--gray-500)', lineHeight: 1 }}>{d.getDate()}</div>
+                      <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase' }}>
+                        {d.toLocaleDateString('pt-PT', { month: 'short' })}
+                      </div>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span className="badge" style={{ background: tc.bg, color: tc.cor, marginBottom: 4, display: 'inline-block', opacity: 0.75 }}>{tc.label}</span>
+                      <div style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35, color: 'var(--gray-600)' }}>{e.titulo}</div>
+                      {e.hora && <div style={{ fontSize: 10, color: 'var(--gray-400)', marginTop: 3, display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={9} />{e.hora}</div>}
+                      {e.local && <div style={{ fontSize: 10, color: 'var(--gray-400)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}><MapPin size={9} />{e.local}</div>}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
