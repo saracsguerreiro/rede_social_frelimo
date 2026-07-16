@@ -36,7 +36,7 @@ export default function Login({ onLogin }) {
           <h1 style={{ color: 'var(--white)', fontSize: 52, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 10, textAlign: 'center' }}>FRELIMO</h1>
           <p style={{ color: 'var(--yellow)', fontSize: 17, fontWeight: 500, marginBottom: 28, textAlign: 'center' }}>Rede interna de militantes e quadros</p>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.7, textAlign: 'center' }}>
-            Comunicação oficial, segura e soberana entre os órgãos do Partido — do Comité Central a cada célula.
+            Comunicação oficial, segura e soberana entre os órgãos do Partido, do Comité Central a cada célula.
           </p>
         </div>
 
