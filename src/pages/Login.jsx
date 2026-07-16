@@ -9,13 +9,15 @@ export default function Login({ onLogin }) {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
 
-      {/* ── Painel esquerdo — vermelho ── */}
+      {/* ── Painel esquerdo — gradiente igual ao menu ── */}
       <div style={{
         width: '46%',
-        background: 'var(--red-600)',
+        background: 'linear-gradient(180deg, #E15059 0%, #D2232A 28%, #8C171C 68%, #5C0F13 100%)',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: '48px 56px',
         overflow: 'hidden',
       }}>
@@ -24,34 +26,42 @@ export default function Login({ onLogin }) {
           <div key={i} style={{ position: 'absolute', top: 0, bottom: 0, left: `${(i + 1) * 6.25}%`, width: 1, background: 'rgba(255,255,255,0.06)' }} />
         ))}
 
-        {/* Logo + nome */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <img src="/frelimo.png" alt="FRELIMO" style={{ width: 56, height: 56, objectFit: 'contain', marginBottom: 28, filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.3))' }} />
-          <h1 style={{ color: 'var(--white)', fontSize: 52, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 10 }}>FRELIMO</h1>
-          <p style={{ color: 'var(--yellow)', fontSize: 18, fontWeight: 500, marginBottom: 28 }}>Rede interna de militantes e quadros</p>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.7, maxWidth: 380, marginBottom: 40 }}>
+        {/* Bloco central */}
+        <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 400 }}>
+          {/* Logo grande */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 36 }}>
+            <img
+              src="/frelimo.png"
+              alt="FRELIMO"
+              style={{ width: 120, height: 120, objectFit: 'contain', filter: 'drop-shadow(0 4px 16px rgba(0,0,0,0.4))' }}
+            />
+          </div>
+
+          <h1 style={{ color: 'var(--white)', fontSize: 52, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 10, textAlign: 'center' }}>FRELIMO</h1>
+          <p style={{ color: 'var(--yellow)', fontSize: 17, fontWeight: 500, marginBottom: 28, textAlign: 'center' }}>Rede interna de militantes e quadros</p>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.7, marginBottom: 36, textAlign: 'center' }}>
             Comunicação oficial, segura e soberana entre os órgãos do Partido — do Comité Central a cada célula.
           </p>
-        </div>
 
-        {/* Feature list */}
-        <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', gap: 18 }}>
-          {[
-            'Circulares e convocatórias oficiais',
-            'Mensagens cifradas por órgão',
-            'Votações e deliberações internas',
-            'Formação política de quadros',
-          ].map(item => (
-            <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--yellow)', flexShrink: 0 }} />
-              <span style={{ color: 'var(--white)', fontSize: 14 }}>{item}</span>
-            </div>
-          ))}
+          {/* Feature list */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {[
+              'Circulares e convocatórias oficiais',
+              'Mensagens cifradas por órgão',
+              'Votações e deliberações internas',
+              'Formação política de quadros',
+            ].map(item => (
+              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--yellow)', flexShrink: 0 }} />
+                <span style={{ color: 'var(--white)', fontSize: 14 }}>{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Footer */}
-        <div style={{ position: 'absolute', bottom: 32, left: 56, right: 56, zIndex: 1 }}>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>
+        <div style={{ position: 'absolute', bottom: 28, left: 56, right: 56, zIndex: 1, textAlign: 'center' }}>
+          <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 12 }}>
             Alojado em Moçambique · Raxio MZ1, Maputo
           </p>
         </div>
