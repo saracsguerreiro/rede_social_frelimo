@@ -19,7 +19,7 @@ const pages = {
   directorio: Directorio, eventos: Eventos, administracao: Administracao,
 };
 
-function TabletFrame({ children }) {
+function TabletFrame({ children, onExit }) {
   return (
     <div style={{
       minHeight: '100vh',
@@ -29,7 +29,27 @@ function TabletFrame({ children }) {
       justifyContent: 'center',
       padding: '48px 40px',
       overflow: 'auto',
+      position: 'relative',
     }}>
+      {/* Botão regressar à versão web */}
+      <button
+        onClick={onExit}
+        style={{
+          position: 'fixed', top: 20, left: 24, zIndex: 100,
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '9px 18px', borderRadius: 50,
+          background: 'rgba(255,255,255,0.1)',
+          color: 'rgba(255,255,255,0.85)',
+          border: '1px solid rgba(255,255,255,0.18)',
+          backdropFilter: 'blur(8px)',
+          fontSize: 13, fontWeight: 600, cursor: 'pointer',
+          transition: 'all 0.15s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = '#fff'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
+      >
+        ← Versão Web
+      </button>
       {/* Tablet body */}
       <div style={{
         width: 1120,
@@ -115,7 +135,7 @@ export default function App() {
   );
 
   if (tabletMode) {
-    return <TabletFrame>{appContent}</TabletFrame>;
+    return <TabletFrame onExit={() => setTabletMode(false)}>{appContent}</TabletFrame>;
   }
 
   return appContent;
