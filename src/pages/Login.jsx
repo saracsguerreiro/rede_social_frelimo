@@ -39,24 +39,9 @@ export default function Login({ onLogin }) {
 
           <h1 style={{ color: 'var(--white)', fontSize: 52, fontWeight: 900, letterSpacing: -1, lineHeight: 1, marginBottom: 10, textAlign: 'center' }}>FRELIMO</h1>
           <p style={{ color: 'var(--yellow)', fontSize: 17, fontWeight: 500, marginBottom: 28, textAlign: 'center' }}>Rede interna de militantes e quadros</p>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.7, marginBottom: 36, textAlign: 'center' }}>
+          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, lineHeight: 1.7, textAlign: 'center' }}>
             Comunicação oficial, segura e soberana entre os órgãos do Partido — do Comité Central a cada célula.
           </p>
-
-          {/* Feature list */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {[
-              'Circulares e convocatórias oficiais',
-              'Mensagens cifradas por órgão',
-              'Votações e deliberações internas',
-              'Formação política de quadros',
-            ].map(item => (
-              <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--yellow)', flexShrink: 0 }} />
-                <span style={{ color: 'var(--white)', fontSize: 14 }}>{item}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Footer */}
