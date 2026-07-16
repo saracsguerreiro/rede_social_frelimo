@@ -21,10 +21,6 @@ export default function Login({ onLogin }) {
         padding: '48px 56px',
         overflow: 'hidden',
       }}>
-        {/* Grid lines overlay */}
-        {[...Array(16)].map((_, i) => (
-          <div key={i} style={{ position: 'absolute', top: 0, bottom: 0, left: `${(i + 1) * 6.25}%`, width: 1, background: 'rgba(255,255,255,0.06)' }} />
-        ))}
 
         {/* Bloco central */}
         <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: 400 }}>
