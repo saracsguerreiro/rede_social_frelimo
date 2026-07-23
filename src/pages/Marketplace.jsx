@@ -17,7 +17,7 @@ const MKT_CSS = `
 .mkt-fadein{animation:mkt-fadein 0.3s ease}
 `;
 
-const HERO_IMG = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80';
+const HERO_IMG = `${import.meta.env.BASE_URL}marketplace-hero.jpg`;
 
 const CATEGORIAS = [
   { nome: 'Tecnologia',   icon: Laptop,          count: 340, desc: 'Software, hardware e soluções tecnológicas para a sua empresa' },
