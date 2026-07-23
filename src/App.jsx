@@ -13,11 +13,13 @@ import Formacao from './pages/Formacao';
 import Directorio from './pages/Directorio';
 import Eventos from './pages/Eventos';
 import Administracao from './pages/Administracao';
+import Marketplace from './pages/Marketplace';
 
 const pages = {
   feed: Feed, mensagens: Mensagens, espacos: Espacos,
   documentos: Documentos, votacoes: Votacoes, formacao: Formacao,
-  directorio: Directorio, eventos: Eventos, administracao: Administracao,
+  directorio: Directorio, eventos: Eventos, marketplace: Marketplace,
+  administracao: Administracao,
 };
 
 const EXIT_BUTTON_STYLE = {
