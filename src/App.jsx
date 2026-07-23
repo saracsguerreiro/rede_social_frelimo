@@ -26,11 +26,11 @@ const EXIT_BUTTON_STYLE = {
   position: 'fixed', top: 20, left: 24, zIndex: 100,
   display: 'flex', alignItems: 'center', gap: 8,
   padding: '9px 18px', borderRadius: 50,
-  background: 'rgba(255,255,255,0.1)',
-  color: 'rgba(255,255,255,0.85)',
-  border: '1px solid rgba(255,255,255,0.18)',
-  backdropFilter: 'blur(8px)',
-  fontSize: 13, fontWeight: 600, cursor: 'pointer',
+  background: 'var(--white)',
+  color: 'var(--red-600)',
+  border: '1.5px solid var(--red-200)',
+  fontSize: 13, fontWeight: 700, cursor: 'pointer',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
 };
 
 function TabletFrame({ children, onExit }) {
@@ -42,15 +42,15 @@ function TabletFrame({ children, onExit }) {
       padding: '48px 40px', overflow: 'auto', position: 'relative',
     }}>
       <button onClick={onExit} style={EXIT_BUTTON_STYLE}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = '#fff'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-50)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'var(--white)'; }}
       >← Versão Web</button>
 
       <div style={{
         width: 1120, height: 800,
         background: 'linear-gradient(160deg, #3e3e40 0%, #1c1c1e 45%, #2c2c2e 100%)',
         borderRadius: 44, padding: '18px 20px',
-        boxShadow: '0 70px 160px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.07), inset 0 1px 0 rgba(255,255,255,0.11)',
+        boxShadow: 'none',
         position: 'relative', flexShrink: 0,
       }}>
         <div style={{ position: 'absolute', top: 9, left: '50%', transform: 'translateX(-50%)', width: 9, height: 9, borderRadius: '50%', background: '#111', border: '1px solid rgba(255,255,255,0.06)' }} />
@@ -64,8 +64,8 @@ function TabletFrame({ children, onExit }) {
         </div>
       </div>
 
-      <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)' }}>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>Protótipo Interactivo · FRELIMO Connect</div>
+      <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', whiteSpace: 'nowrap' }}>
+        <div style={{ fontSize: 11, color: 'var(--gray-300)', letterSpacing: 1, textTransform: 'uppercase', fontWeight: 600 }}>Protótipo Interactivo · FRELIMO Connect</div>
       </div>
     </div>
   );
@@ -80,8 +80,8 @@ function MobileFrame({ children, onExit }) {
       padding: '40px', overflow: 'auto', position: 'relative',
     }}>
       <button onClick={onExit} style={EXIT_BUTTON_STYLE}
-        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.18)'; e.currentTarget.style.color = '#fff'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-50)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'var(--white)'; }}
       >← Versão Web</button>
 
       {/* Phone body */}
@@ -89,7 +89,7 @@ function MobileFrame({ children, onExit }) {
         width: 393, height: 852,
         background: 'linear-gradient(160deg, #3e3e40 0%, #1c1c1e 45%, #2c2c2e 100%)',
         borderRadius: 52, padding: '12px',
-        boxShadow: '0 60px 140px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.07), inset 0 1px 0 rgba(255,255,255,0.1)',
+        boxShadow: 'none',
         position: 'relative', flexShrink: 0,
       }}>
         {/* Dynamic Island */}
