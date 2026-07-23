@@ -1,11 +1,6 @@
-import { useState } from 'react';
-import {
-  Users, TrendingUp, FileText, Shield, AlertTriangle, CheckCircle,
-  Search, X, Phone, Mail, Calendar, MapPin, CreditCard, Bell, Send,
-} from 'lucide-react';
-import { statsAdmin, membrosAdmin } from '../data/mockData';
+import { Users, TrendingUp, FileText, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+import { statsAdmin } from '../data/mockData';
 
-// ── KPI card ──────────────────────────────────────────────────────────────────
 const KPICard = ({ label, valor, sub, cor, icon: Icon }) => (
   <div className="card" style={{ padding: '20px', borderTop: `4px solid ${cor}` }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -17,282 +12,16 @@ const KPICard = ({ label, valor, sub, cor, icon: Icon }) => (
   </div>
 );
 
-// ── Avatar círculo ─────────────────────────────────────────────────────────────
-const Avatar = ({ initials, size = 36, bg = 'var(--red-600)' }) => (
-  <div style={{
-    width: size, height: size, borderRadius: '50%',
-    background: bg, color: '#fff',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: size * 0.33, fontWeight: 700, flexShrink: 0,
-  }}>
-    {initials}
-  </div>
-);
-
-// ── Chip de estado de quotas ────────────────────────────────────────────────────
-const QuotasChip = ({ estado }) => (
-  <span style={{
-    display: 'inline-flex', alignItems: 'center', gap: 4,
-    padding: '3px 8px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-    background: estado === 'em_dia' ? 'var(--green-50)' : 'var(--red-50)',
-    color: estado === 'em_dia' ? 'var(--green-800)' : 'var(--red-800)',
-  }}>
-    {estado === 'em_dia'
-      ? <><CheckCircle size={11} /> Em dia</>
-      : <><AlertTriangle size={11} /> Em atraso</>}
-  </span>
-);
-
-// ── Modal de detalhe do membro ─────────────────────────────────────────────────
-function ModalMembro({ membro, onClose }) {
-  if (!membro) return null;
-  const Row = ({ icon: Icon, label, value }) => (
-    <div style={{ display: 'flex', gap: 10, padding: '9px 0', borderBottom: '1px solid var(--gray-200)', alignItems: 'flex-start' }}>
-      <Icon size={14} color="var(--gray-400)" style={{ flexShrink: 0, marginTop: 1 }} />
-      <div>
-        <div style={{ fontSize: 10, color: 'var(--gray-400)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 1 }}>{label}</div>
-        <div style={{ fontSize: 13, color: 'var(--black)', fontWeight: 500 }}>{value || '—'}</div>
-      </div>
-    </div>
-  );
-
+export default function Administracao({ setPage, mobile }) {
   return (
-    <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      zIndex: 1000, padding: 20,
-    }} onClick={onClose}>
-      <div style={{
-        background: '#fff', borderRadius: 16, width: '100%', maxWidth: 440,
-        boxShadow: '0 24px 64px rgba(0,0,0,0.25)', overflow: 'hidden',
-      }} onClick={e => e.stopPropagation()}>
-        {/* Cabeçalho */}
-        <div style={{
-          background: 'linear-gradient(135deg, var(--red-600), var(--red-800))',
-          padding: '24px 24px 20px',
-          display: 'flex', alignItems: 'center', gap: 16, position: 'relative',
-        }}>
-          <Avatar initials={membro.avatar} size={56} bg="rgba(255,255,255,0.2)" />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 2 }}>{membro.nome}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>{membro.cargo}</div>
-            <div style={{ marginTop: 6 }}><QuotasChip estado={membro.quotas} /></div>
-          </div>
-          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
-            <X size={15} />
-          </button>
-        </div>
-
-        {/* Dados */}
-        <div style={{ padding: '4px 24px 20px' }}>
-          <Row icon={CreditCard} label="Cartão de militante" value={membro.cartao} />
-          <Row icon={Calendar} label="Data de nascimento" value={membro.dataNascimento ? new Date(membro.dataNascimento).toLocaleDateString('pt-PT') : null} />
-          <Row icon={Users} label="Sexo" value={membro.sexo === 'M' ? 'Masculino' : membro.sexo === 'F' ? 'Feminino' : null} />
-          <Row icon={Phone} label="Telemóvel" value={membro.telefone} />
-          <Row icon={Mail} label="Email" value={membro.email} />
-          <Row icon={MapPin} label="Célula" value={membro.celula} />
-          <Row icon={Shield} label="Órgão / Nível" value={`${membro.orgao} · ${membro.nivel}`} />
-          <Row icon={Calendar} label="Data de filiação" value={membro.dataFiliacao ? new Date(membro.dataFiliacao).toLocaleDateString('pt-PT') : null} />
-          <Row icon={CreditCard} label="Último pagamento de quota" value={membro.ultimoPagamento ? new Date(membro.ultimoPagamento).toLocaleDateString('pt-PT') : null} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ── Submenu ─────────────────────────────────────────────────────────────────────
-const MENU = [
-  { key: 'inicio', label: 'Início' },
-  { key: 'membros', label: 'Membros' },
-  { key: 'quotas', label: 'Quotas' },
-];
-
-// ── Secção: Membros ─────────────────────────────────────────────────────────────
-function SecaoMembros({ mobile }) {
-  const [busca, setBusca] = useState('');
-  const [membroAberto, setMembroAberto] = useState(null);
-
-  const filtrados = membrosAdmin.filter(m =>
-    !busca || m.nome.toLowerCase().includes(busca.toLowerCase()) ||
-    m.cartao.toLowerCase().includes(busca.toLowerCase()) ||
-    m.orgao.toLowerCase().includes(busca.toLowerCase())
-  );
-
-  return (
-    <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 800 }}>Lista de Membros</h3>
-        <span style={{ fontSize: 12, color: 'var(--gray-400)' }}>{membrosAdmin.length} militantes</span>
+    <div style={{ padding: mobile ? '14px 12px' : '28px 32px', maxWidth: 980 }}>
+      {/* Warning bar */}
+      <div style={{ padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 24, display: 'flex', gap: 8, alignItems: 'center' }}>
+        <Shield size={16} color="var(--black)" />
+        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--black)' }}>Painel de Administração — acesso restrito a administradores. Todos os acessos ficam em auditoria imutável.</span>
       </div>
 
-      {/* Barra de pesquisa */}
-      <div style={{ position: 'relative', marginBottom: 16 }}>
-        <Search size={14} color="var(--gray-400)" style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
-        <input
-          value={busca}
-          onChange={e => setBusca(e.target.value)}
-          placeholder="Pesquisar por nome, cartão ou órgão..."
-          style={{
-            width: '100%', padding: '10px 12px 10px 36px',
-            border: '1.5px solid var(--gray-200)', borderRadius: 8,
-            background: 'var(--gray-100)', fontSize: 13, outline: 'none', boxSizing: 'border-box',
-          }}
-          onFocus={e => e.target.style.borderColor = 'var(--red-600)'}
-          onBlur={e => e.target.style.borderColor = 'var(--gray-200)'}
-        />
-      </div>
-
-      {/* Lista */}
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        {filtrados.length === 0 && (
-          <div style={{ padding: 24, textAlign: 'center', color: 'var(--gray-400)', fontSize: 13 }}>Nenhum membro encontrado.</div>
-        )}
-        {filtrados.map((m, i) => (
-          <div
-            key={m.id}
-            onClick={() => setMembroAberto(m)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 12,
-              padding: '12px 16px', cursor: 'pointer',
-              borderBottom: i < filtrados.length - 1 ? '1px solid var(--gray-200)' : 'none',
-              transition: 'background 0.1s',
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = 'var(--gray-100)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            <Avatar initials={m.avatar} size={38} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--black)' }}>{m.nome}</div>
-              <div style={{ fontSize: 11, color: 'var(--gray-400)', marginTop: 1 }}>{m.cargo} · {m.orgao}</div>
-            </div>
-            {!mobile && <div style={{ fontSize: 11, color: 'var(--gray-400)', fontFamily: 'monospace' }}>{m.cartao}</div>}
-            <QuotasChip estado={m.quotas} />
-          </div>
-        ))}
-      </div>
-
-      <ModalMembro membro={membroAberto} onClose={() => setMembroAberto(null)} />
-    </div>
-  );
-}
-
-// ── Secção: Quotas ──────────────────────────────────────────────────────────────
-function SecaoQuotas({ mobile }) {
-  const [notifGeral, setNotifGeral] = useState(false);
-  const [notifIndividual, setNotifIndividual] = useState(null);
-
-  const emDia = membrosAdmin.filter(m => m.quotas === 'em_dia');
-  const emAtraso = membrosAdmin.filter(m => m.quotas === 'em_atraso');
-
-  const enviarGeral = () => {
-    setNotifGeral(true);
-    setTimeout(() => setNotifGeral(false), 3000);
-  };
-
-  const enviarIndividual = (id) => {
-    setNotifIndividual(id);
-    setTimeout(() => setNotifIndividual(null), 2500);
-  };
-
-  const ListaQuotas = ({ membros, tipo }) => (
-    <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-      {membros.length === 0 && (
-        <div style={{ padding: 20, textAlign: 'center', fontSize: 13, color: 'var(--gray-400)' }}>Nenhum.</div>
-      )}
-      {membros.map((m, i) => (
-        <div key={m.id} style={{
-          display: 'flex', alignItems: 'center', gap: 12, padding: '11px 16px',
-          borderBottom: i < membros.length - 1 ? '1px solid var(--gray-200)' : 'none',
-        }}>
-          <Avatar initials={m.avatar} size={34} bg={tipo === 'atraso' ? 'var(--red-600)' : 'var(--green-600)'} />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, fontWeight: 700 }}>{m.nome}</div>
-            <div style={{ fontSize: 11, color: 'var(--gray-400)' }}>
-              {tipo === 'atraso'
-                ? `Último pag.: ${new Date(m.ultimoPagamento).toLocaleDateString('pt-PT')}`
-                : `Pago em ${new Date(m.ultimoPagamento).toLocaleDateString('pt-PT')}`}
-            </div>
-          </div>
-          {tipo === 'atraso' && (
-            <button
-              onClick={() => enviarIndividual(m.id)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 5,
-                padding: '6px 12px', borderRadius: 6, border: '1.5px solid var(--red-600)',
-                background: notifIndividual === m.id ? 'var(--red-600)' : 'transparent',
-                color: notifIndividual === m.id ? '#fff' : 'var(--red-600)',
-                fontSize: 11, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0,
-              }}
-            >
-              <Bell size={11} />
-              {notifIndividual === m.id ? 'Enviado!' : 'Notificar'}
-            </button>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Resumo */}
-      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 12 }}>
-        <div className="card" style={{ padding: '16px 20px', borderTop: '4px solid var(--green-600)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <CheckCircle size={22} color="var(--green-600)" />
-          <div>
-            <div style={{ fontSize: 24, fontWeight: 800 }}>{emDia.length}</div>
-            <div style={{ fontSize: 12, color: 'var(--gray-400)' }}>Quotas em dia</div>
-          </div>
-        </div>
-        <div className="card" style={{ padding: '16px 20px', borderTop: '4px solid var(--red-600)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <AlertTriangle size={22} color="var(--red-600)" />
-          <div>
-            <div style={{ fontSize: 24, fontWeight: 800 }}>{emAtraso.length}</div>
-            <div style={{ fontSize: 12, color: 'var(--gray-400)' }}>Com atraso no pagamento</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Em atraso */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <h3 style={{ fontSize: 14, fontWeight: 800, color: 'var(--red-800)' }}>
-            <AlertTriangle size={14} color="var(--red-600)" style={{ marginRight: 6, verticalAlign: 'middle' }} />
-            Em atraso — {emAtraso.length} militante(s)
-          </h3>
-          <button
-            onClick={enviarGeral}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              padding: '8px 14px', borderRadius: 8,
-              background: notifGeral ? 'var(--green-600)' : 'var(--red-600)',
-              color: '#fff', border: 'none', fontSize: 12, fontWeight: 700,
-              cursor: 'pointer', transition: 'background 0.2s',
-            }}
-          >
-            <Send size={12} />
-            {notifGeral ? 'Notificação enviada!' : 'Notificar todos'}
-          </button>
-        </div>
-        <ListaQuotas membros={emAtraso} tipo="atraso" />
-      </div>
-
-      {/* Em dia */}
-      <div>
-        <h3 style={{ fontSize: 14, fontWeight: 800, color: 'var(--green-800)', marginBottom: 12 }}>
-          <CheckCircle size={14} color="var(--green-600)" style={{ marginRight: 6, verticalAlign: 'middle' }} />
-          Em dia — {emDia.length} militante(s)
-        </h3>
-        <ListaQuotas membros={emDia} tipo="emdia" />
-      </div>
-    </div>
-  );
-}
-
-// ── Secção: Início (original) ───────────────────────────────────────────────────
-function SecaoInicio({ mobile }) {
-  return (
-    <div>
+      {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: 14, marginBottom: 28 }}>
         <KPICard label="Militantes activos" valor={statsAdmin.militantesActivos.toLocaleString('pt-PT')} sub="Na plataforma este mês" cor="var(--red-600)" icon={Users} />
         <KPICard label="Quotas em dia" valor={statsAdmin.quotasEmDia} sub="78% dos militantes" cor="var(--green-600)" icon={CheckCircle} />
@@ -303,6 +32,7 @@ function SecaoInicio({ mobile }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 16 }}>
+        {/* KPI target */}
         <div className="card">
           <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>KPIs do Piloto — Mês 12</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -329,6 +59,7 @@ function SecaoInicio({ mobile }) {
           </div>
         </div>
 
+        {/* Audit log */}
         <div className="card">
           <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Registo de Auditoria</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -341,7 +72,10 @@ function SecaoInicio({ mobile }) {
             ].map((log, i) => (
               <div key={i} style={{ display: 'flex', gap: 12, padding: '8px 0', borderBottom: '1px solid var(--gray-200)', alignItems: 'center' }}>
                 <span style={{ fontSize: 10, color: 'var(--gray-400)', fontFamily: 'monospace', width: 40, flexShrink: 0 }}>{log.hora}</span>
-                <div style={{ width: 6, height: 6, borderRadius: '50%', flexShrink: 0, background: log.tipo === 'auth' ? 'var(--green-600)' : log.tipo === 'publicacao' ? 'var(--red-600)' : log.tipo === 'admin' ? 'var(--yellow)' : 'var(--gray-400)' }} />
+                <div style={{
+                  width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+                  background: log.tipo === 'auth' ? 'var(--green-600)' : log.tipo === 'publicacao' ? 'var(--red-600)' : log.tipo === 'admin' ? 'var(--yellow)' : 'var(--gray-400)',
+                }} />
                 <span style={{ fontSize: 12, flex: 1 }}>{log.acao}</span>
                 <span style={{ fontSize: 11, color: 'var(--gray-400)' }}>{log.usuario}</span>
               </div>
@@ -350,6 +84,7 @@ function SecaoInicio({ mobile }) {
           <button className="btn-ghost" style={{ width: '100%', marginTop: 12, fontSize: 12 }}>Ver auditoria completa</button>
         </div>
 
+        {/* Governance rules */}
         <div className="card" style={{ gridColumn: '1 / -1' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16 }}>Regras Estatutárias — Estado de Cumprimento</h3>
           <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: 12 }}>
@@ -372,51 +107,6 @@ function SecaoInicio({ mobile }) {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-// ── Componente principal ────────────────────────────────────────────────────────
-export default function Administracao({ setPage, mobile }) {
-  const [secao, setSecao] = useState('inicio');
-
-  return (
-    <div style={{ padding: mobile ? '14px 12px' : '28px 32px', maxWidth: 980 }}>
-      {/* Warning bar */}
-      <div style={{ padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
-        <Shield size={16} color="var(--black)" />
-        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--black)' }}>Painel de Administração — acesso restrito a administradores. Todos os acessos ficam em auditoria imutável.</span>
-      </div>
-
-      {/* Submenu */}
-      <div style={{
-        display: 'flex', gap: 2, marginBottom: 24,
-        background: 'var(--gray-100)', borderRadius: 10, padding: 4,
-        width: 'fit-content',
-      }}>
-        {MENU.map(item => (
-          <button
-            key={item.key}
-            onClick={() => setSecao(item.key)}
-            style={{
-              padding: '8px 20px', borderRadius: 8, border: 'none',
-              background: secao === item.key ? '#fff' : 'transparent',
-              color: secao === item.key ? 'var(--black)' : 'var(--gray-400)',
-              fontWeight: secao === item.key ? 700 : 500,
-              fontSize: 13, cursor: 'pointer',
-              boxShadow: secao === item.key ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
-              transition: 'all 0.15s',
-            }}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Conteúdo */}
-      {secao === 'inicio' && <SecaoInicio mobile={mobile} />}
-      {secao === 'membros' && <SecaoMembros mobile={mobile} />}
-      {secao === 'quotas' && <SecaoQuotas mobile={mobile} />}
     </div>
   );
 }
