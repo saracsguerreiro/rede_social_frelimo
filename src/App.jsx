@@ -13,11 +13,13 @@ import Formacao from './pages/Formacao';
 import Directorio from './pages/Directorio';
 import Eventos from './pages/Eventos';
 import Administracao from './pages/Administracao';
+import Marketplace from './pages/Marketplace';
 
 const pages = {
   feed: Feed, mensagens: Mensagens, espacos: Espacos,
   documentos: Documentos, votacoes: Votacoes, formacao: Formacao,
-  directorio: Directorio, eventos: Eventos, administracao: Administracao,
+  directorio: Directorio, eventos: Eventos, marketplace: Marketplace,
+  administracao: Administracao,
 };
 
 const EXIT_BUTTON_STYLE = {
@@ -125,15 +127,60 @@ function MobileFrame({ children, onExit }) {
   );
 }
 
+function MarketplaceExterno({ onVoltar }) {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--gray-100)', display: 'flex', flexDirection: 'column' }}>
+      {/* Barra superior */}
+      <div style={{ background: 'linear-gradient(90deg, var(--red-800), var(--red-600))', padding: '14px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <img src={`${import.meta.env.BASE_URL}frelimo.png`} alt="FRELIMO" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+          <div>
+            <div style={{ color: '#fff', fontWeight: 900, fontSize: 16 }}>Marketplace FRELIMO</div>
+            <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11 }}>Acesso para empresas e fornecedores</div>
+          </div>
+        </div>
+        <button onClick={onVoltar} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '8px 18px', background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 50, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}>
+          ← Voltar ao login
+        </button>
+      </div>
+      {/* Conteúdo do Marketplace */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <Marketplace setPage={() => {}} mobile={false} initialTab="empresa" />
+      </div>
+    </div>
+  );
+}
+
+const isMobileUrl = new URLSearchParams(window.location.search).get('mode') === 'mobile';
+
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [page, setPage] = useState('feed');
   const [tabletMode, setTabletMode] = useState(false);
   const [mobileMode, setMobileMode] = useState(false);
+  const [marketplaceExterno, setMarketplaceExterno] = useState(false);
 
-  if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} />;
+  if (!loggedIn && marketplaceExterno) {
+    return <MarketplaceExterno onVoltar={() => setMarketplaceExterno(false)} />;
+  }
+
+  if (!loggedIn) return <Login onLogin={() => setLoggedIn(true)} onMarketplace={() => setMarketplaceExterno(true)} />;
 
   const PageComponent = pages[page] || Feed;
+
+  if (isMobileUrl) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', background: 'var(--gray-100)', overflow: 'hidden' }}>
+        <TopBar page={page} tabletMode={false} setTabletMode={() => {}} mobileMode={true} setMobileMode={() => {}} onLogout={() => setLoggedIn(false)} setPage={setPage} />
+        <main style={{ flex: 1, minHeight: 0, overflowY: 'auto', background: 'var(--gray-100)' }}>
+          <PageComponent setPage={setPage} mobile={true} />
+        </main>
+        <BottomNav page={page} setPage={setPage} />
+      </div>
+    );
+  }
 
   if (mobileMode) {
     return (

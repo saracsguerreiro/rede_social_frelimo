@@ -1,6 +1,6 @@
 import {
   Rss, MessageSquare, Grid, FileText, CheckSquare,
-  BookOpen, Users, Calendar, Settings, LogOut
+  BookOpen, Users, Calendar, Settings, LogOut, Store
 } from 'lucide-react';
 import { currentUser } from '../data/mockData';
 
@@ -13,6 +13,8 @@ const navItems = [
   { id: 'formacao', label: 'Formação', icon: BookOpen },
   { id: 'directorio', label: 'Directório', icon: Users },
   { id: 'eventos', label: 'Eventos', icon: Calendar },
+  { separator: true },
+  { id: 'marketplace', label: 'Marketplace', icon: Store },
 ];
 
 export default function Sidebar({ page, setPage, onLogout }) {
@@ -64,7 +66,9 @@ export default function Sidebar({ page, setPage, onLogout }) {
 
       {/* Nav */}
       <nav style={{ flex: 1, padding: '4px 12px', overflowY: 'auto' }}>
-        {navItems.map(({ id, label, icon: Icon, badge }) => {
+        {navItems.map((item, idx) => {
+          if (item.separator) return <div key={`sep-${idx}`} style={{ margin: '8px 4px', height: 1, background: 'rgba(255,255,255,0.12)' }} />;
+          const { id, label, icon: Icon, badge } = item;
           const active = page === id;
           return (
             <button
