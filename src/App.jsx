@@ -106,7 +106,7 @@ function MobileFrame({ children, onExit }) {
         <div style={{ position: 'absolute', bottom: 7, left: '50%', transform: 'translateX(-50%)', width: 130, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.18)' }} />
 
         {/* Screen */}
-        <div style={{ width: '100%', height: '100%', background: '#f7f7f8', borderRadius: 42, overflow: 'hidden', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ width: '100%', height: '100%', background: '#f7f7f8', borderRadius: 42, overflow: 'hidden', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
           {/* Status bar (behind Dynamic Island) */}
           <div style={{ height: 50, flexShrink: 0, background: 'var(--white)', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 24px 8px', zIndex: 1 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--black)' }}>9:41</span>
@@ -172,7 +172,7 @@ export default function App() {
 
   if (isMobileUrl) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', background: 'var(--gray-100)', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', background: 'var(--gray-100)', overflow: 'hidden', position: 'relative' }}>
         <TopBar page={page} tabletMode={false} setTabletMode={() => {}} mobileMode={true} setMobileMode={() => {}} onLogout={() => setLoggedIn(false)} setPage={setPage} />
         <main style={{ flex: 1, minHeight: 0, overflowY: 'auto', background: 'var(--gray-100)' }}>
           <PageComponent setPage={setPage} mobile={true} />
@@ -185,7 +185,7 @@ export default function App() {
   if (mobileMode) {
     return (
       <MobileFrame onExit={() => setMobileMode(false)}>
-        <TopBar page={page} tabletMode={false} setTabletMode={() => {}} mobileMode={true} setMobileMode={setMobileMode} onLogout={() => setLoggedIn(false)} />
+        <TopBar page={page} tabletMode={false} setTabletMode={() => {}} mobileMode={true} setMobileMode={setMobileMode} onLogout={() => setLoggedIn(false)} setPage={setPage} />
         <main style={{ flex: 1, overflowY: 'auto', background: 'var(--gray-100)' }}>
           <PageComponent setPage={setPage} mobile={true} />
         </main>
