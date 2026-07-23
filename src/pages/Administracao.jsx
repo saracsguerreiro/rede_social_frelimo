@@ -381,31 +381,26 @@ export default function Administracao({ setPage, mobile }) {
   const [secao, setSecao] = useState('inicio');
 
   return (
-    <div style={{ padding: mobile ? '14px 12px' : '28px 32px', maxWidth: 980 }}>
+    <div style={{ maxWidth: 980, width: '100%' }}>
       {/* Warning bar */}
-      <div style={{ padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 20, display: 'flex', gap: 8, alignItems: 'center' }}>
+      <div style={{ margin: mobile ? '14px 12px 0' : '28px 32px 0', padding: '10px 16px', background: 'var(--yellow)', borderRadius: 4, marginBottom: 0, display: 'flex', gap: 8, alignItems: 'center' }}>
         <Shield size={16} color="var(--black)" />
         <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--black)' }}>Painel de Administração — acesso restrito a administradores. Todos os acessos ficam em auditoria imutável.</span>
       </div>
 
-      {/* Submenu */}
-      <div style={{
-        display: 'flex', gap: 2, marginBottom: 24,
-        background: 'var(--gray-100)', borderRadius: 10, padding: 4,
-        width: 'fit-content',
-      }}>
+      {/* Submenu — mesmo estilo do Marketplace */}
+      <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--gray-200)', padding: mobile ? '0 12px' : '0 32px', display: 'flex', alignItems: 'center', marginBottom: 0 }}>
         {MENU.map(item => (
           <button
             key={item.key}
             onClick={() => setSecao(item.key)}
             style={{
-              padding: '8px 20px', borderRadius: 8, border: 'none',
-              background: secao === item.key ? '#fff' : 'transparent',
-              color: secao === item.key ? 'var(--black)' : 'var(--gray-400)',
-              fontWeight: secao === item.key ? 700 : 500,
-              fontSize: 13, cursor: 'pointer',
-              boxShadow: secao === item.key ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
-              transition: 'all 0.15s',
+              padding: '14px 20px', fontSize: 13,
+              fontWeight: secao === item.key ? 800 : 500,
+              color: secao === item.key ? 'var(--red-600)' : 'var(--gray-600)',
+              background: 'none', border: 'none', cursor: 'pointer',
+              borderBottom: secao === item.key ? '2.5px solid var(--red-600)' : '2.5px solid transparent',
+              marginBottom: -1, transition: 'all 0.15s',
             }}
           >
             {item.label}
@@ -414,9 +409,11 @@ export default function Administracao({ setPage, mobile }) {
       </div>
 
       {/* Conteúdo */}
-      {secao === 'inicio' && <SecaoInicio mobile={mobile} />}
-      {secao === 'membros' && <SecaoMembros mobile={mobile} />}
-      {secao === 'quotas' && <SecaoQuotas mobile={mobile} />}
+      <div style={{ padding: mobile ? '14px 12px' : '24px 32px' }}>
+        {secao === 'inicio'  && <SecaoInicio mobile={mobile} />}
+        {secao === 'membros' && <SecaoMembros mobile={mobile} />}
+        {secao === 'quotas'  && <SecaoQuotas mobile={mobile} />}
+      </div>
     </div>
   );
 }
