@@ -1,4 +1,4 @@
-import { Bell, Search, SquarePen, Tablet, Smartphone, Store } from 'lucide-react';
+import { Bell, Search, SquarePen, Tablet, Smartphone, Store, ShieldCheck } from 'lucide-react';
 import { currentUser } from '../data/mockData';
 
 const pageTitles = {
@@ -34,6 +34,11 @@ export default function TopBar({ page, tabletMode, setTabletMode, mobileMode, se
         {setPage && (
           <button onClick={() => setPage('marketplace')} style={{ background: 'none', padding: 6, color: 'var(--gray-600)', border: 'none', cursor: 'pointer' }}>
             <Store size={18} />
+          </button>
+        )}
+        {setPage && (
+          <button onClick={() => setPage('administracao')} style={{ background: 'none', padding: 6, color: 'var(--gray-600)', border: 'none', cursor: 'pointer' }}>
+            <ShieldCheck size={18} />
           </button>
         )}
         <button style={{ position: 'relative', background: 'none', padding: 6, color: 'var(--gray-600)', border: 'none', cursor: 'pointer' }}>

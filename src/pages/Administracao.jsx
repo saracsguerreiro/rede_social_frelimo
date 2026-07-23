@@ -158,10 +158,71 @@ const MENU = [
   { key: 'quotas', label: 'Quotas' },
 ];
 
+// ── Detalhe do membro (página mobile) ─────────────────────────────────────────
+function DetalheMembroMobile({ membro, onVoltar }) {
+  const SectionLabel = ({ label }) => (
+    <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--red-600)', textTransform: 'uppercase', letterSpacing: 1, padding: '14px 0 6px', borderBottom: '1.5px solid var(--red-100)', marginBottom: 8 }}>
+      {label}
+    </div>
+  );
+  const Field = ({ label, value }) => (
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ fontSize: 10, color: 'var(--gray-400)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 1 }}>{label}</div>
+      <div style={{ fontSize: 13, color: value ? 'var(--black)' : 'var(--gray-300)', fontWeight: 500 }}>{value || '—'}</div>
+    </div>
+  );
+  const Grid2 = ({ children }) => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 16px' }}>{children}</div>
+  );
+  const dataNasc = membro.dataNascimento ? new Date(membro.dataNascimento).toLocaleDateString('pt-PT') : null;
+  const dataFil = membro.dataFiliacao ? new Date(membro.dataFiliacao).toLocaleDateString('pt-PT') : null;
+  const dataQuota = membro.ultimoPagamento ? new Date(membro.ultimoPagamento).toLocaleDateString('pt-PT') : null;
+  const sexoLabel = membro.sexo === 'M' ? 'Masculino' : membro.sexo === 'F' ? 'Feminino' : membro.sexo;
+
+  return (
+    <div style={{ background: 'var(--gray-100)', minHeight: '100%' }}>
+      {/* Cabeçalho */}
+      <div style={{ background: 'linear-gradient(135deg, var(--red-600), var(--red-800))', padding: '16px 16px 20px' }}>
+        <button onClick={onVoltar} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: 20, padding: '5px 12px', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
+          ← Voltar
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <Avatar initials={membro.avatar} size={50} bg="rgba(255,255,255,0.2)" />
+          <div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: '#fff', marginBottom: 2 }}>{membro.nome}</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>{membro.cargo} · {membro.orgao}</div>
+            <div style={{ marginTop: 6 }}><QuotasChip estado={membro.quotas} /></div>
+          </div>
+        </div>
+      </div>
+      {/* Corpo */}
+      <div style={{ padding: '4px 12px 24px' }}>
+        <SectionLabel label="Identificação" />
+        <Grid2><Field label="Nome" value={membro.nome} /><Field label="Apelido" value={membro.apelido} /></Grid2>
+        <Field label="Nome completo" value={membro.nomeCompleto || membro.nome} />
+        <Grid2><Field label="N.º cartão" value={membro.cartao} /><Field label="Data nascimento" value={dataNasc} /></Grid2>
+        <Grid2><Field label="Sexo" value={sexoLabel} /><Field label="Estado civil" value={membro.estadoCivil} /></Grid2>
+        <SectionLabel label="Contactos" />
+        <Grid2><Field label="Telefone" value={membro.telefone} /><Field label="Email" value={membro.email} /></Grid2>
+        <Field label="Morada" value={membro.morada} />
+        <SectionLabel label="Formação e Profissão" />
+        <Grid2><Field label="Nível académico" value={membro.nivelAcademico} /><Field label="Profissão" value={membro.profissao} /></Grid2>
+        <SectionLabel label="Filiação Partidária" />
+        <Grid2><Field label="Célula" value={membro.celula} /><Field label="Órgão / Nível" value={membro.orgao ? `${membro.orgao} · ${membro.nivel}` : null} /></Grid2>
+        <Grid2><Field label="Cargo" value={membro.cargo} /><Field label="Data filiação" value={dataFil} /></Grid2>
+        <SectionLabel label="Quotas" />
+        <Grid2>
+          <Field label="Estado" value={membro.quotas === 'em_dia' ? 'Em dia' : 'Em atraso'} />
+          <Field label="Último pagamento" value={dataQuota} />
+        </Grid2>
+      </div>
+    </div>
+  );
+}
+
 // ── Secção: Membros ─────────────────────────────────────────────────────────────
-function SecaoMembros({ mobile }) {
+function SecaoMembros({ mobile, onAbrirMembro }) {
   const [busca, setBusca] = useState('');
-  const [membroAberto, setMembroAberto] = useState(null);
 
   const filtrados = membrosAdmin.filter(m =>
     !busca || m.nome.toLowerCase().includes(busca.toLowerCase()) ||
@@ -201,7 +262,7 @@ function SecaoMembros({ mobile }) {
         {filtrados.map((m, i) => (
           <div
             key={m.id}
-            onClick={() => setMembroAberto(m)}
+            onClick={() => onAbrirMembro(m)}
             style={{
               display: 'flex', alignItems: 'center', gap: 12,
               padding: '12px 16px', cursor: 'pointer',
@@ -221,8 +282,6 @@ function SecaoMembros({ mobile }) {
           </div>
         ))}
       </div>
-
-      <ModalMembro membro={membroAberto} onClose={() => setMembroAberto(null)} />
     </div>
   );
 }
@@ -284,23 +343,40 @@ function SecaoQuotas({ mobile }) {
     </div>
   );
 
+  const total = membrosAdmin.length;
+  const pct = Math.round((emDia.length / total) * 100);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Resumo */}
-      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 12 }}>
-        <div className="card" style={{ padding: '16px 20px', borderTop: '4px solid var(--green-600)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <CheckCircle size={22} color="var(--green-600)" />
-          <div>
-            <div style={{ fontSize: 24, fontWeight: 800 }}>{emDia.length}</div>
-            <div style={{ fontSize: 12, color: 'var(--gray-400)' }}>Quotas em dia</div>
+      {/* Big number conformidade */}
+      <div style={{ background: 'linear-gradient(135deg, #059669, var(--green-600))', borderRadius: 12, padding: mobile ? '18px 20px' : '20px 28px', color: '#fff' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, marginBottom: 6 }}>
+          <div style={{ fontSize: mobile ? 52 : 60, fontWeight: 900, lineHeight: 1 }}>{pct}%</div>
+          <div style={{ paddingBottom: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, opacity: 0.95 }}>conformidade</div>
+            <div style={{ fontSize: 11, opacity: 0.75 }}>{emDia.length} de {total} militantes</div>
           </div>
         </div>
-        <div className="card" style={{ padding: '16px 20px', borderTop: '4px solid var(--red-600)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <AlertTriangle size={22} color="var(--red-600)" />
-          <div>
-            <div style={{ fontSize: 24, fontWeight: 800 }}>{emAtraso.length}</div>
-            <div style={{ fontSize: 12, color: 'var(--gray-400)' }}>Com atraso no pagamento</div>
+        <div style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 4, height: 7 }}>
+          <div style={{ width: `${pct}%`, height: '100%', background: '#fff', borderRadius: 4, transition: 'width 0.6s ease' }} />
+        </div>
+      </div>
+
+      {/* Contagens */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+        <div style={{ background: 'var(--white)', borderRadius: 10, padding: '14px', borderLeft: '3px solid var(--green-600)', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--black)', lineHeight: 1 }}>{emDia.length}</div>
+            <CheckCircle size={15} color="var(--green-600)" />
           </div>
+          <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color: 'var(--gray-400)', marginTop: 4 }}>Em dia</div>
+        </div>
+        <div style={{ background: 'var(--white)', borderRadius: 10, padding: '14px', borderLeft: '3px solid var(--red-600)', boxShadow: '0 1px 4px rgba(0,0,0,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--black)', lineHeight: 1 }}>{emAtraso.length}</div>
+            <AlertTriangle size={15} color="var(--red-600)" />
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color: 'var(--gray-400)', marginTop: 4 }}>Em atraso</div>
         </div>
       </div>
 
@@ -340,17 +416,40 @@ function SecaoQuotas({ mobile }) {
   );
 }
 
-// ── Secção: Início (original) ───────────────────────────────────────────────────
+// ── KPI compacto para mobile ───────────────────────────────────────────────────
+const KPICardMobile = ({ label, valor, cor, icon: Icon }) => (
+  <div style={{
+    background: 'var(--white)', borderRadius: 10, padding: '14px 14px 12px',
+    borderLeft: `3px solid ${cor}`, boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+      <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--black)', lineHeight: 1 }}>{valor}</div>
+      <Icon size={15} color={cor} style={{ marginTop: 2 }} />
+    </div>
+    <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color: 'var(--gray-400)', lineHeight: 1.3 }}>{label}</div>
+  </div>
+);
+
+// ── Secção: Início ─────────────────────────────────────────────────────────────
 function SecaoInicio({ mobile }) {
   return (
     <div>
-      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: 14, marginBottom: 28 }}>
-        <KPICard label="Militantes activos" valor={statsAdmin.militantesActivos.toLocaleString('pt-PT')} sub="Na plataforma este mês" cor="var(--red-600)" icon={Users} />
-        <KPICard label="Quotas em dia" valor={statsAdmin.quotasEmDia} sub="78% dos militantes" cor="var(--green-600)" icon={CheckCircle} />
-        <KPICard label="Células activas" valor={statsAdmin.celulasActivas} sub="Com espaço activo" cor="var(--yellow)" icon={TrendingUp} />
-        <KPICard label="Uso da plataforma" valor={statsAdmin.usoPlatforma} sub="Activos semanais / meta: 60%" cor="var(--red-600)" icon={TrendingUp} />
-        <KPICard label="Circulares difundidas" valor={statsAdmin.circularesDifundidas} sub="Este mês" cor="var(--green-600)" icon={FileText} />
-        <KPICard label="Tempo de difusão" valor={statsAdmin.tempoDifusao} sub="Sede → células (média)" cor="var(--black)" icon={TrendingUp} />
+      <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: mobile ? 10 : 14, marginBottom: 28 }}>
+        {mobile ? <>
+          <KPICardMobile label="Militantes activos" valor={statsAdmin.militantesActivos.toLocaleString('pt-PT')} cor="var(--red-600)" icon={Users} />
+          <KPICardMobile label="Quotas em dia" valor={statsAdmin.quotasEmDia} cor="var(--green-600)" icon={CheckCircle} />
+          <KPICardMobile label="Células activas" valor={statsAdmin.celulasActivas} cor="var(--yellow)" icon={TrendingUp} />
+          <KPICardMobile label="Uso plataforma" valor={statsAdmin.usoPlatforma} cor="var(--red-600)" icon={TrendingUp} />
+          <KPICardMobile label="Circulares" valor={statsAdmin.circularesDifundidas} cor="var(--green-600)" icon={FileText} />
+          <KPICardMobile label="Tempo difusão" valor={statsAdmin.tempoDifusao} cor="var(--black)" icon={TrendingUp} />
+        </> : <>
+          <KPICard label="Militantes activos" valor={statsAdmin.militantesActivos.toLocaleString('pt-PT')} sub="Na plataforma este mês" cor="var(--red-600)" icon={Users} />
+          <KPICard label="Quotas em dia" valor={statsAdmin.quotasEmDia} sub="78% dos militantes" cor="var(--green-600)" icon={CheckCircle} />
+          <KPICard label="Células activas" valor={statsAdmin.celulasActivas} sub="Com espaço activo" cor="var(--yellow)" icon={TrendingUp} />
+          <KPICard label="Uso da plataforma" valor={statsAdmin.usoPlatforma} sub="Activos semanais / meta: 60%" cor="var(--red-600)" icon={TrendingUp} />
+          <KPICard label="Circulares difundidas" valor={statsAdmin.circularesDifundidas} sub="Este mês" cor="var(--green-600)" icon={FileText} />
+          <KPICard label="Tempo de difusão" valor={statsAdmin.tempoDifusao} sub="Sede → células (média)" cor="var(--black)" icon={TrendingUp} />
+        </>}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap: 16 }}>
@@ -430,6 +529,12 @@ function SecaoInicio({ mobile }) {
 // ── Componente principal ────────────────────────────────────────────────────────
 export default function Administracao({ setPage, mobile }) {
   const [secao, setSecao] = useState('inicio');
+  const [membroAberto, setMembroAberto] = useState(null);
+
+  // Mobile: detalhe do membro ocupa a página inteira (dentro do device)
+  if (mobile && membroAberto) {
+    return <DetalheMembroMobile membro={membroAberto} onVoltar={() => setMembroAberto(null)} />;
+  }
 
   return (
     <div style={{ maxWidth: 980, width: '100%' }}>
@@ -462,9 +567,12 @@ export default function Administracao({ setPage, mobile }) {
       {/* Conteúdo */}
       <div style={{ padding: mobile ? '14px 12px' : '24px 32px' }}>
         {secao === 'inicio'  && <SecaoInicio mobile={mobile} />}
-        {secao === 'membros' && <SecaoMembros mobile={mobile} />}
+        {secao === 'membros' && <SecaoMembros mobile={mobile} onAbrirMembro={setMembroAberto} />}
         {secao === 'quotas'  && <SecaoQuotas mobile={mobile} />}
       </div>
+
+      {/* Desktop: modal sobreposto */}
+      {!mobile && <ModalMembro membro={membroAberto} onClose={() => setMembroAberto(null)} />}
     </div>
   );
 }
