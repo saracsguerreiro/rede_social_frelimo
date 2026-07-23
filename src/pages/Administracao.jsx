@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Users, TrendingUp, FileText, Shield, AlertTriangle, CheckCircle,
   Search, X, Phone, Mail, Calendar, MapPin, CreditCard, Bell, Send,
+  BookOpen, Briefcase, Building2, Heart, GraduationCap,
 } from 'lucide-react';
 import { statsAdmin, membrosAdmin } from '../data/mockData';
 
@@ -46,15 +47,28 @@ const QuotasChip = ({ estado }) => (
 // ── Modal de detalhe do membro ─────────────────────────────────────────────────
 function ModalMembro({ membro, onClose }) {
   if (!membro) return null;
-  const Row = ({ icon: Icon, label, value }) => (
-    <div style={{ display: 'flex', gap: 10, padding: '9px 0', borderBottom: '1px solid var(--gray-200)', alignItems: 'flex-start' }}>
-      <Icon size={14} color="var(--gray-400)" style={{ flexShrink: 0, marginTop: 1 }} />
-      <div>
-        <div style={{ fontSize: 10, color: 'var(--gray-400)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 1 }}>{label}</div>
-        <div style={{ fontSize: 13, color: 'var(--black)', fontWeight: 500 }}>{value || '—'}</div>
-      </div>
+
+  const SectionLabel = ({ label }) => (
+    <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--red-600)', textTransform: 'uppercase', letterSpacing: 1, padding: '16px 0 8px', borderBottom: '1.5px solid var(--red-100)', marginBottom: 10 }}>
+      {label}
     </div>
   );
+
+  const Field = ({ label, value }) => (
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ fontSize: 10, color: 'var(--gray-400)', fontWeight: 600, textTransform: 'uppercase', marginBottom: 2 }}>{label}</div>
+      <div style={{ fontSize: 13, color: value ? 'var(--black)' : 'var(--gray-300)', fontWeight: 500 }}>{value || '—'}</div>
+    </div>
+  );
+
+  const Grid2 = ({ children }) => (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 20px' }}>{children}</div>
+  );
+
+  const dataNasc = membro.dataNascimento ? new Date(membro.dataNascimento).toLocaleDateString('pt-PT') : null;
+  const dataFil = membro.dataFiliacao ? new Date(membro.dataFiliacao).toLocaleDateString('pt-PT') : null;
+  const dataQuota = membro.ultimoPagamento ? new Date(membro.ultimoPagamento).toLocaleDateString('pt-PT') : null;
+  const sexoLabel = membro.sexo === 'M' ? 'Masculino' : membro.sexo === 'F' ? 'Feminino' : membro.sexo;
 
   return (
     <div style={{
@@ -63,37 +77,74 @@ function ModalMembro({ membro, onClose }) {
       zIndex: 1000, padding: 20,
     }} onClick={onClose}>
       <div style={{
-        background: '#fff', borderRadius: 16, width: '100%', maxWidth: 440,
+        background: '#fff', borderRadius: 16, width: '100%', maxWidth: 620,
         boxShadow: '0 24px 64px rgba(0,0,0,0.25)', overflow: 'hidden',
+        maxHeight: '90vh', display: 'flex', flexDirection: 'column',
       }} onClick={e => e.stopPropagation()}>
+
         {/* Cabeçalho */}
         <div style={{
           background: 'linear-gradient(135deg, var(--red-600), var(--red-800))',
           padding: '24px 24px 20px',
-          display: 'flex', alignItems: 'center', gap: 16, position: 'relative',
+          display: 'flex', alignItems: 'center', gap: 16, flexShrink: 0,
         }}>
           <Avatar initials={membro.avatar} size={56} bg="rgba(255,255,255,0.2)" />
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 18, fontWeight: 800, color: '#fff', marginBottom: 2 }}>{membro.nome}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>{membro.cargo}</div>
+            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>{membro.cargo} · {membro.orgao}</div>
             <div style={{ marginTop: 6 }}><QuotasChip estado={membro.quotas} /></div>
           </div>
-          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff' }}>
+          <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#fff', flexShrink: 0 }}>
             <X size={15} />
           </button>
         </div>
 
-        {/* Dados */}
-        <div style={{ padding: '4px 24px 20px' }}>
-          <Row icon={CreditCard} label="Cartão de militante" value={membro.cartao} />
-          <Row icon={Calendar} label="Data de nascimento" value={membro.dataNascimento ? new Date(membro.dataNascimento).toLocaleDateString('pt-PT') : null} />
-          <Row icon={Users} label="Sexo" value={membro.sexo === 'M' ? 'Masculino' : membro.sexo === 'F' ? 'Feminino' : null} />
-          <Row icon={Phone} label="Telemóvel" value={membro.telefone} />
-          <Row icon={Mail} label="Email" value={membro.email} />
-          <Row icon={MapPin} label="Célula" value={membro.celula} />
-          <Row icon={Shield} label="Órgão / Nível" value={`${membro.orgao} · ${membro.nivel}`} />
-          <Row icon={Calendar} label="Data de filiação" value={membro.dataFiliacao ? new Date(membro.dataFiliacao).toLocaleDateString('pt-PT') : null} />
-          <Row icon={CreditCard} label="Último pagamento de quota" value={membro.ultimoPagamento ? new Date(membro.ultimoPagamento).toLocaleDateString('pt-PT') : null} />
+        {/* Corpo com scroll */}
+        <div style={{ overflowY: 'auto', padding: '4px 24px 24px' }}>
+
+          <SectionLabel label="Identificação" />
+          <Grid2>
+            <Field label="Nome" value={membro.nome} />
+            <Field label="Apelido" value={membro.apelido} />
+          </Grid2>
+          <Field label="Nome completo" value={membro.nomeCompleto || membro.nome} />
+          <Grid2>
+            <Field label="N.º de cartão de militante" value={membro.cartao} />
+            <Field label="Data de nascimento" value={dataNasc} />
+          </Grid2>
+          <Grid2>
+            <Field label="Sexo" value={sexoLabel} />
+            <Field label="Estado civil" value={membro.estadoCivil} />
+          </Grid2>
+
+          <SectionLabel label="Contactos" />
+          <Grid2>
+            <Field label="Telefone" value={membro.telefone} />
+            <Field label="Email institucional" value={membro.email} />
+          </Grid2>
+          <Field label="Morada" value={membro.morada} />
+
+          <SectionLabel label="Formação e Profissão" />
+          <Grid2>
+            <Field label="Nível académico" value={membro.nivelAcademico} />
+            <Field label="Profissão" value={membro.profissao} />
+          </Grid2>
+
+          <SectionLabel label="Filiação Partidária" />
+          <Grid2>
+            <Field label="Célula" value={membro.celula} />
+            <Field label="Órgão partidário / Nível" value={membro.orgao ? `${membro.orgao} · ${membro.nivel}` : null} />
+          </Grid2>
+          <Grid2>
+            <Field label="Cargo partidário" value={membro.cargo} />
+            <Field label="Data de filiação" value={dataFil} />
+          </Grid2>
+
+          <SectionLabel label="Quotas" />
+          <Grid2>
+            <Field label="Estado das quotas" value={membro.quotas === 'em_dia' ? 'Em dia' : membro.quotas === 'em_atraso' ? 'Em atraso' : membro.quotas} />
+            <Field label="Último pagamento" value={dataQuota} />
+          </Grid2>
         </div>
       </div>
     </div>
