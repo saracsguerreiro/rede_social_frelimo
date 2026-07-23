@@ -83,66 +83,64 @@ function EntrarForm({ onLogin }) {
   );
 }
 
-const selectStyle = { ...inputStyle, appearance: 'none', cursor: 'pointer' };
-
 function RegistarForm({ onLogin }) {
   const [form, setForm] = useState({
-    nome: '', apelido: '', nomeCompleto: '', cartao: '',
-    dataNascimento: '', sexo: '', estadoCivil: '',
-    telefone: '', email: '', morada: '',
-    nivelAcademico: '', profissao: '',
-    celula: '', cargo: '',
-    docIdentidade: null,
+    nome: '', apelido: '', cartao: '', dataNascimento: '',
+    sexo: '', telefone: '', email: '', celula: '', cargo: '',
     senha: '', confirmarSenha: '',
   });
   const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [nomeDoc, setNomeDoc] = useState('');
+  const [erro, setErro] = useState('');
 
   const set = field => e => setForm(f => ({ ...f, [field]: e.target.value }));
+
+  const handleSubmit = () => {
+    if (!form.nome || !form.apelido || !form.cartao || !form.senha) {
+      setErro('Preencha todos os campos obrigatórios.');
+      return;
+    }
+    if (form.senha !== form.confirmarSenha) {
+      setErro('As senhas não coincidem.');
+      return;
+    }
+    setErro('');
+    onLogin();
+  };
+
+  const fStyle = campo => ({
+    ...inputStyle,
+    ...(campo === 'cartao' ? { fontFamily: 'monospace', letterSpacing: 1 } : {}),
+  });
+
   const focusRed = e => e.target.style.borderColor = 'var(--red-600)';
   const blurGray = e => e.target.style.borderColor = 'var(--gray-200)';
 
-  const handleDoc = e => {
-    const file = e.target.files[0];
-    if (file) {
-      setForm(f => ({ ...f, docIdentidade: file }));
-      setNomeDoc(file.name);
-    }
-  };
-
   return (
     <>
-      {/* Identificação */}
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>Identificação</div>
-
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
         <Field label="Nome *">
           <input value={form.nome} onChange={set('nome')} placeholder="Ex: Américo"
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
         <Field label="Apelido *">
           <input value={form.apelido} onChange={set('apelido')} placeholder="Ex: Muteia"
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
       </div>
 
-      <Field label="Nome completo *">
-        <input value={form.nomeCompleto} onChange={set('nomeCompleto')} placeholder="Ex: Américo João Muteia"
-          style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
-      </Field>
-
       <Field label="N.º de cartão de militante *">
         <input value={form.cartao} onChange={set('cartao')} placeholder="FREL-0000-000000"
-          style={{ ...inputStyle, fontFamily: 'monospace', letterSpacing: 1 }} onFocus={focusRed} onBlur={blurGray} />
+          style={fStyle('cartao')} onFocus={focusRed} onBlur={blurGray} />
       </Field>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
         <Field label="Data de nascimento">
           <input type="date" value={form.dataNascimento} onChange={set('dataNascimento')}
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
         <Field label="Sexo">
-          <select value={form.sexo} onChange={set('sexo')} style={selectStyle} onFocus={focusRed} onBlur={blurGray}>
+          <select value={form.sexo} onChange={set('sexo')}
+            style={{ ...fStyle(), appearance: 'none' }} onFocus={focusRed} onBlur={blurGray}>
             <option value="">Seleccionar</option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
@@ -150,98 +148,32 @@ function RegistarForm({ onLogin }) {
         </Field>
       </div>
 
-      <Field label="Estado civil">
-        <select value={form.estadoCivil} onChange={set('estadoCivil')} style={selectStyle} onFocus={focusRed} onBlur={blurGray}>
-          <option value="">Seleccionar</option>
-          <option value="solteiro">Solteiro/a</option>
-          <option value="casado">Casado/a</option>
-          <option value="uniao">União de facto</option>
-          <option value="divorciado">Divorciado/a</option>
-          <option value="viuvo">Viúvo/a</option>
-        </select>
-      </Field>
-
-      {/* Contactos */}
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, marginTop: 6 }}>Contactos</div>
-
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
-        <Field label="Telefone">
+        <Field label="N.º de telemóvel">
           <input value={form.telefone} onChange={set('telefone')} placeholder="+258 8X XXX XXXX"
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
         <Field label="Email institucional">
           <input type="email" value={form.email} onChange={set('email')} placeholder="nome@frelimo.mz"
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
       </div>
-
-      <Field label="Morada">
-        <input value={form.morada} onChange={set('morada')} placeholder="Ex: Av. Eduardo Mondlane, n.º 12, Maputo"
-          style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
-      </Field>
-
-      {/* Formação e profissão */}
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, marginTop: 6 }}>Formação e Profissão</div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
-        <Field label="Nível académico">
-          <select value={form.nivelAcademico} onChange={set('nivelAcademico')} style={selectStyle} onFocus={focusRed} onBlur={blurGray}>
-            <option value="">Seleccionar</option>
-            <option value="primario">Ensino Primário</option>
-            <option value="secundario">Ensino Secundário</option>
-            <option value="tecnico">Ensino Técnico</option>
-            <option value="bacharel">Bacharelato</option>
-            <option value="licenciatura">Licenciatura</option>
-            <option value="mestrado">Mestrado</option>
-            <option value="doutoramento">Doutoramento</option>
-          </select>
-        </Field>
-        <Field label="Profissão">
-          <input value={form.profissao} onChange={set('profissao')} placeholder="Ex: Professor"
-            style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
-        </Field>
-      </div>
-
-      {/* Filiação */}
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, marginTop: 6 }}>Filiação Partidária</div>
 
       <Field label="Célula / Órgão partidário">
         <input value={form.celula} onChange={set('celula')} placeholder="Ex: Célula 7 — Polana Cimento"
-          style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+          style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
       </Field>
 
       <Field label="Cargo">
         <input value={form.cargo} onChange={set('cargo')} placeholder="Ex: Secretário Distrital"
-          style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+          style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
       </Field>
-
-      {/* Documento de identidade */}
-      <Field label="Documento de identificação">
-        <label style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          padding: '10px 14px', border: '1.5px dashed var(--gray-200)',
-          borderRadius: 8, background: 'var(--gray-100)', cursor: 'pointer',
-          transition: 'border-color 0.15s',
-        }}
-          onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--red-600)'}
-          onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--gray-200)'}
-        >
-          <input type="file" accept="image/*,.pdf" onChange={handleDoc} style={{ display: 'none' }} />
-          <span style={{ fontSize: 18 }}>📎</span>
-          <span style={{ fontSize: 12, color: nomeDoc ? 'var(--black)' : 'var(--gray-400)' }}>
-            {nomeDoc || 'Clique para carregar BI, Passaporte ou DIRE (PDF ou imagem)'}
-          </span>
-        </label>
-      </Field>
-
-      {/* Acesso */}
-      <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10, marginTop: 6 }}>Acesso</div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
         <Field label="Senha *">
           <div style={{ position: 'relative' }}>
             <input type={mostrarSenha ? 'text' : 'password'} value={form.senha} onChange={set('senha')}
-              placeholder="••••••••" style={{ ...inputStyle, paddingRight: 38 }}
+              placeholder="••••••••" style={{ ...fStyle(), paddingRight: 38 }}
               onFocus={focusRed} onBlur={blurGray} />
             <button type="button" onClick={() => setMostrarSenha(!mostrarSenha)}
               style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', background: 'none', color: 'var(--gray-400)', padding: 0 }}>
@@ -251,12 +183,16 @@ function RegistarForm({ onLogin }) {
         </Field>
         <Field label="Confirmar senha *">
           <input type="password" value={form.confirmarSenha} onChange={set('confirmarSenha')}
-            placeholder="••••••••" style={inputStyle} onFocus={focusRed} onBlur={blurGray} />
+            placeholder="••••••••" style={fStyle()} onFocus={focusRed} onBlur={blurGray} />
         </Field>
       </div>
 
+      {erro && (
+        <p style={{ fontSize: 12, color: 'var(--red-600)', marginBottom: 10, fontWeight: 600 }}>{erro}</p>
+      )}
+
       <button
-        onClick={onLogin}
+        onClick={handleSubmit}
         style={{
           width: '100%', padding: '13px',
           background: 'var(--red-600)', color: 'var(--white)',
