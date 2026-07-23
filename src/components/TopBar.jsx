@@ -4,7 +4,7 @@ import { currentUser } from '../data/mockData';
 const pageTitles = {
   feed: 'Feed Oficial', mensagens: 'Mensagens', espacos: 'Espaços',
   documentos: 'Documentos', votacoes: 'Votações', formacao: 'Formação',
-  directorio: 'Directório', eventos: 'Eventos', administracao: 'Administração',
+  directorio: 'Directório', eventos: 'Eventos', marketplace: 'Marketplace', administracao: 'Administração',
 };
 
 export default function TopBar({ page, tabletMode, setTabletMode, mobileMode, setMobileMode, onLogout }) {
@@ -58,28 +58,6 @@ export default function TopBar({ page, tabletMode, setTabletMode, mobileMode, se
         <span style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8, background: 'var(--red-600)', borderRadius: '50%', border: '1.5px solid var(--white)' }} />
       </button>
 
-      {/* Toggle tablet */}
-      <button
-        title={tabletMode ? 'Vista desktop' : 'Vista tablet'}
-        onClick={() => setTabletMode(m => !m)}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, background: tabletMode ? 'var(--red-50)' : 'var(--gray-100)', color: tabletMode ? 'var(--red-600)' : 'var(--gray-500)', border: `1.5px solid ${tabletMode ? 'var(--red-200)' : 'var(--gray-200)'}`, cursor: 'pointer', transition: 'all 0.15s' }}
-        onMouseEnter={e => { if (!tabletMode) { e.currentTarget.style.background = 'var(--red-50)'; e.currentTarget.style.color = 'var(--red-600)'; e.currentTarget.style.borderColor = 'var(--red-200)'; } }}
-        onMouseLeave={e => { if (!tabletMode) { e.currentTarget.style.background = 'var(--gray-100)'; e.currentTarget.style.color = 'var(--gray-500)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; } }}
-      >
-        {tabletMode ? <Monitor size={16} /> : <Tablet size={16} />}
-      </button>
-
-      {/* Toggle mobile */}
-      <button
-        title="Vista mobile"
-        onClick={() => setMobileMode(true)}
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34, borderRadius: 10, background: 'var(--gray-100)', color: 'var(--gray-500)', border: '1.5px solid var(--gray-200)', cursor: 'pointer', transition: 'all 0.15s' }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-50)'; e.currentTarget.style.color = 'var(--red-600)'; e.currentTarget.style.borderColor = 'var(--red-200)'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'var(--gray-100)'; e.currentTarget.style.color = 'var(--gray-500)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; }}
-      >
-        <Smartphone size={16} />
-      </button>
-
       <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
         <div className="avatar" style={{ width: 32, height: 32, fontSize: 11 }}>{currentUser.avatar}</div>
         <div>
@@ -87,6 +65,30 @@ export default function TopBar({ page, tabletMode, setTabletMode, mobileMode, se
           <div style={{ fontSize: 10, color: 'var(--gray-400)' }}>{currentUser.orgao}</div>
         </div>
       </div>
+
+      {/* Toggle tablet */}
+      <button
+        title={tabletMode ? 'Vista desktop' : 'Vista tablet'}
+        onClick={() => setTabletMode(m => !m)}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, padding: '5px 12px', borderRadius: 10, background: tabletMode ? 'var(--red-50)' : 'var(--gray-100)', color: tabletMode ? 'var(--red-600)' : 'var(--gray-500)', border: `1.5px solid ${tabletMode ? 'var(--red-200)' : 'var(--gray-200)'}`, cursor: 'pointer', fontSize: 9, fontWeight: 700, letterSpacing: '0.04em', transition: 'all 0.15s' }}
+        onMouseEnter={e => { if (!tabletMode) { e.currentTarget.style.background = 'var(--red-50)'; e.currentTarget.style.color = 'var(--red-600)'; e.currentTarget.style.borderColor = 'var(--red-200)'; } }}
+        onMouseLeave={e => { if (!tabletMode) { e.currentTarget.style.background = 'var(--gray-100)'; e.currentTarget.style.color = 'var(--gray-500)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; } }}
+      >
+        {tabletMode ? <Monitor size={16} /> : <Tablet size={16} />}
+        TABLET
+      </button>
+
+      {/* Toggle mobile */}
+      <button
+        title="Vista mobile"
+        onClick={() => setMobileMode(true)}
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, padding: '5px 12px', borderRadius: 10, background: 'var(--gray-100)', color: 'var(--gray-500)', border: '1.5px solid var(--gray-200)', cursor: 'pointer', fontSize: 9, fontWeight: 700, letterSpacing: '0.04em', transition: 'all 0.15s' }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--red-50)'; e.currentTarget.style.color = 'var(--red-600)'; e.currentTarget.style.borderColor = 'var(--red-200)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'var(--gray-100)'; e.currentTarget.style.color = 'var(--gray-500)'; e.currentTarget.style.borderColor = 'var(--gray-200)'; }}
+      >
+        <Smartphone size={16} />
+        MOBILE
+      </button>
     </header>
   );
 }

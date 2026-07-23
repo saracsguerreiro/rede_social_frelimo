@@ -146,6 +146,53 @@ function PostCard({ post, onAddToDirectory }) {
   );
 }
 
+const anuncios = [
+  {
+    id: 1, categoria: 'Serviços', categoriaStyle: { background: 'rgba(0,0,0,0.55)', color: '#fff' },
+    img: 'https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=400&h=160&fit=crop&auto=format',
+    avatarSigla: 'DM', avatarCor: 'var(--green-600)',
+    empresa: 'DigiMoz Agency', titulo: 'Serviços de Marketing Digital',
+    preco: 'A partir de 25.000 MT',
+  },
+  {
+    id: 2, categoria: 'Tecnologia', categoriaStyle: { background: 'rgba(0,0,0,0.55)', color: '#fff' },
+    img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=160&fit=crop&auto=format',
+    avatarSigla: 'MT', avatarCor: 'var(--red-800)',
+    empresa: 'MozTech Solutions', titulo: 'Laptop HP ProBook 450 G9',
+    preco: '185.000 MT',
+  },
+  {
+    id: 3, categoria: 'Construção', categoriaStyle: { background: 'rgba(0,0,0,0.55)', color: '#fff' },
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=160&fit=crop&auto=format',
+    avatarSigla: 'BM', avatarCor: 'var(--green-800)',
+    empresa: 'BuildMoz Construções', titulo: 'Serviços de Construção Civil',
+    preco: 'Sob consulta',
+  },
+];
+
+function AnuncioCard({ anuncio }) {
+  return (
+    <div style={{ background: 'var(--white)', borderRadius: 16, border: '1px solid var(--gray-200)', overflow: 'hidden', marginBottom: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+      <div style={{ position: 'relative' }}>
+        <img src={anuncio.img} alt={anuncio.titulo} style={{ width: '100%', height: 130, objectFit: 'cover', display: 'block' }} />
+        <span style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(0,0,0,0.6)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 4, letterSpacing: '0.05em' }}>ANÚNCIO</span>
+        <span style={{ position: 'absolute', top: 8, right: 8, ...anuncio.categoriaStyle, fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: 4 }}>{anuncio.categoria}</span>
+      </div>
+      <div style={{ padding: '12px 14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
+          <div style={{ width: 22, height: 22, borderRadius: '50%', background: anuncio.avatarCor, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: 800, flexShrink: 0 }}>{anuncio.avatarSigla}</div>
+          <span style={{ fontSize: 11, color: 'var(--gray-500)', fontWeight: 600 }}>{anuncio.empresa}</span>
+        </div>
+        <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--black)', marginBottom: 10, lineHeight: 1.3 }}>{anuncio.titulo}</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--red-600)' }}>{anuncio.preco}</span>
+          <button style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '6px 14px', background: 'var(--red-600)', borderRadius: 50, border: 'none', color: '#fff', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Ver</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function RightColumn({ setPage }) {
   return (
     <div style={{ width: 280, flexShrink: 0 }}>
@@ -170,6 +217,8 @@ function RightColumn({ setPage }) {
         </div>
       </div>
 
+      <AnuncioCard anuncio={anuncios[0]} />
+
       {/* Próximos eventos */}
       <div className="widget">
         <div className="widget-header">
@@ -192,6 +241,8 @@ function RightColumn({ setPage }) {
         </div>
       </div>
 
+      <AnuncioCard anuncio={anuncios[1]} />
+
       {/* Espaços */}
       <div className="widget">
         <div className="widget-header">
@@ -211,6 +262,8 @@ function RightColumn({ setPage }) {
           ))}
         </div>
       </div>
+
+      <AnuncioCard anuncio={anuncios[2]} />
 
       {/* Novos na rede */}
       <div className="widget">
