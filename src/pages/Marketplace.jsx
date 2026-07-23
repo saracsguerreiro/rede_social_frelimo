@@ -5,7 +5,7 @@ import {
   Package, CheckCircle, FileText, SlidersHorizontal,
   TrendingUp, Eye, MessageSquare, Pencil, Trash2, Megaphone,
   MousePointer, Pause, Play, Home, DollarSign, BarChart2,
-  ClipboardList,
+  ClipboardList, Leaf, Heart, MoreHorizontal,
 } from 'lucide-react';
 
 const MKT_CSS = `
@@ -20,11 +20,14 @@ const MKT_CSS = `
 const HERO_IMG = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80';
 
 const CATEGORIAS = [
-  { nome: 'Tecnologia',   icon: Laptop,    count: 340, desc: 'Software, hardware e soluções tecnológicas para a sua empresa' },
-  { nome: 'Equipamentos', icon: Wrench,    count: 280, desc: 'Maquinaria, ferramentas e equipamentos industriais' },
-  { nome: 'Serviços',     icon: Briefcase, count: 195, desc: 'Consultoria, formação e serviços empresariais especializados' },
-  { nome: 'Construção',   icon: Building2, count: 160, desc: 'Materiais, empreiteiros e soluções para construção civil' },
-  { nome: 'Logística',    icon: Truck,     count: 125, desc: 'Transporte, armazenamento e distribuição de mercadorias' },
+  { nome: 'Tecnologia',   icon: Laptop,          count: 340, desc: 'Software, hardware e soluções tecnológicas para a sua empresa' },
+  { nome: 'Equipamentos', icon: Wrench,          count: 280, desc: 'Maquinaria, ferramentas e equipamentos industriais' },
+  { nome: 'Serviços',     icon: Briefcase,       count: 195, desc: 'Consultoria, formação e serviços empresariais especializados' },
+  { nome: 'Construção',   icon: Building2,       count: 160, desc: 'Materiais, empreiteiros e soluções para construção civil' },
+  { nome: 'Logística',    icon: Truck,           count: 125, desc: 'Transporte, armazenamento e distribuição de mercadorias' },
+  { nome: 'Agronegócio',  icon: Leaf,            count: 98,  desc: 'Produtos agrícolas, equipamentos rurais e insumos' },
+  { nome: 'Saúde',        icon: Heart,           count: 74,  desc: 'Equipamentos médicos, farmácia e serviços de saúde' },
+  { nome: 'Outros',       icon: MoreHorizontal,  count: 210, desc: 'Outros produtos e serviços para a sua empresa' },
 ];
 
 const PRODUTOS = [
