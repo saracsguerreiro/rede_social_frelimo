@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CheckCircle, Clock, Lock, Users, TrendingUp, Award } from 'lucide-react';
 import { votacoes as initialVotacoes } from '../data/mockData';
+import AnunciosSidebar from '../components/AnunciosSidebar';
 
 export default function Votacoes({ setPage, mobile }) {
   const [votacoes, setVotacoes] = useState(initialVotacoes);
@@ -180,6 +181,7 @@ export default function Votacoes({ setPage, mobile }) {
             </div>
           ))}
         </div>
+        <AnunciosSidebar />
       </div>
       }
     </div>

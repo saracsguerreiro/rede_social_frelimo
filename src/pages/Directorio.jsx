@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Search, MessageSquare, CheckCircle, AlertCircle, BookmarkPlus, BookmarkCheck, Users } from 'lucide-react';
 import { militantes, myDirectory as initialMyDir } from '../data/mockData';
+import AnunciosSidebar from '../components/AnunciosSidebar';
 
 export default function Directorio({ setPage, mobile }) {
   const [busca, setBusca] = useState('');
@@ -118,6 +119,7 @@ export default function Directorio({ setPage, mobile }) {
             ))}
           </div>
         </div>
+        <AnunciosSidebar />
       </div>
       }
     </div>

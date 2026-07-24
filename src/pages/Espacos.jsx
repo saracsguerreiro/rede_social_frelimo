@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Users, TrendingUp, Search, Plus, Check, Bell, ChevronDown, ChevronRight } from 'lucide-react';
 import { espacos, mySpaces } from '../data/mockData';
+import AnunciosSidebar from '../components/AnunciosSidebar';
 
 const GRUPOS = [
   { key: 'nacional',     label: 'Nacional',      cor: 'var(--red-600)' },
@@ -81,6 +82,7 @@ export default function Espacos({ setPage, mobile }) {
       {/* ── Coluna direita — Espaços com grupos ── */}
       <div style={{ width: mobile ? '100%' : 290, flexShrink: 0 }}>
         <div className="widget">
+
           {/* Header da coluna */}
           <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--gray-200)' }}>
             <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
@@ -175,6 +177,7 @@ export default function Espacos({ setPage, mobile }) {
             </div>
           )}
         </div>
+        {!mobile && <AnunciosSidebar />}
       </div>
     </div>
   );
