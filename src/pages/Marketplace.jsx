@@ -5,8 +5,30 @@ import {
   Package, CheckCircle, FileText, SlidersHorizontal,
   TrendingUp, Eye, MessageSquare, Pencil, Trash2, Megaphone,
   MousePointer, Pause, Play, Home, DollarSign, BarChart2,
-  ClipboardList, Leaf, Heart, MoreHorizontal,
+  ClipboardList, Leaf, Heart, MoreHorizontal, Smartphone, Copy,
 } from 'lucide-react';
+
+// ── Logos de métodos de pagamento ───────────────────────────────────────────────
+const VisaLogo = () => (
+  <svg width="56" height="36" viewBox="0 0 56 36" fill="none">
+    <rect width="56" height="36" rx="6" fill="#1A1F71"/>
+    <text x="7" y="25" fontFamily="Arial, sans-serif" fontWeight="900" fontSize="18" fill="white" letterSpacing="1">VISA</text>
+  </svg>
+);
+
+const EmolhLogo = () => (
+  <div style={{ width: 56, height: 36, borderRadius: 6, background: '#E30613', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+    <span style={{ color: '#fff', fontSize: 13, fontWeight: 900, letterSpacing: '-0.3px', lineHeight: 1 }}>e-mola</span>
+    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 7, fontWeight: 600, letterSpacing: 0.5 }}>VODACOM</span>
+  </div>
+);
+
+const AtmLogo = () => (
+  <div style={{ width: 56, height: 36, borderRadius: 6, background: '#0A2D6E', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+    <Building2 size={14} color="#fff" />
+    <span style={{ color: '#fff', fontSize: 7, fontWeight: 800, letterSpacing: 0.5 }}>REFERÊNCIA</span>
+  </div>
+);
 
 const MKT_CSS = `
 @keyframes mkt-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,0.5)} 50%{box-shadow:0 0 0 10px rgba(255,255,255,0)} }
@@ -163,53 +185,295 @@ function ProdutoModal({ produto, onClose, onAddToCart }) {
 }
 
 // ── CarrinhoModal ──────────────────────────────────────────────────────────────
-function CarrinhoModal({ itens, onClose, onUpdateQty, onRemove }) {
-  const total = itens.reduce((s, i) => s + i.produto.precoNum * i.quantidade, 0);
+const METODOS = [
+  {
+    id: 'visa',
+    Logo: VisaLogo,
+    nome: 'Cartão Visa / Mastercard',
+    desc: 'Pague com cartão de crédito ou débito. Processamento seguro.',
+  },
+  {
+    id: 'referencia',
+    Logo: AtmLogo,
+    nome: 'Referência Bancária (ATM)',
+    desc: 'Receba uma referência para pagar em qualquer caixa ATM ou homebanking.',
+  },
+  {
+    id: 'emola',
+    Logo: EmolhLogo,
+    nome: 'E-mola',
+    desc: 'Pague rapidamente com a sua carteira Vodacom E-mola.',
+  },
+];
+
+function PanelHeader({ titulo, onBack, onClose, passo }) {
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1000, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
-      <div onClick={e => e.stopPropagation()} style={{ width: 380, height: '100vh', background: '#fff', boxShadow: '-8px 0 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ padding: '20px 20px 16px', borderBottom: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <ShoppingCart size={18} color="var(--red-600)" />
-            <span style={{ fontSize: 16, fontWeight: 800 }}>Carrinho</span>
-            <span style={{ background: 'var(--red-600)', color: '#fff', borderRadius: 50, padding: '2px 8px', fontSize: 11, fontWeight: 800 }}>{itens.length}</span>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-400)' }}><X size={18} /></button>
-        </div>
-        <div style={{ flex: 1, overflowY: 'auto' }}>
-          {itens.length === 0 && <div style={{ padding: 40, textAlign: 'center', color: 'var(--gray-400)', fontSize: 13 }}><X size={40} strokeWidth={1} style={{ margin: '0 auto 12px' }} /><p>O carrinho está vazio</p></div>}
-          {itens.map(({ produto: p, quantidade }) => (
-            <div key={p.id} style={{ display: 'flex', gap: 12, padding: '14px 20px', borderBottom: '1px solid var(--gray-200)' }}>
-              <div style={{ width: 60, height: 60, borderRadius: 12, overflow: 'hidden', flexShrink: 0, background: 'var(--gray-100)' }}>
-                <img src={p.imagem} alt={p.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => e.target.style.display = 'none'} />
+    <div style={{ padding: '18px 20px 14px', borderBottom: '1px solid var(--gray-200)', display: 'flex', alignItems: 'center', gap: 10 }}>
+      {onBack && (
+        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-500)', padding: 4, display: 'flex' }}>
+          <ChevronLeft size={18} />
+        </button>
+      )}
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 15, fontWeight: 800 }}>{titulo}</div>
+        <div style={{ display: 'flex', gap: 6, marginTop: 6 }}>
+          {['Carrinho', 'Pagamento', 'Confirmação'].map((s, i) => (
+            <div key={s} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 20, height: 20, borderRadius: '50%', background: i < passo ? 'var(--green-600)' : i === passo ? 'var(--red-600)' : 'var(--gray-200)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {i < passo ? <Check size={10} color="#fff" /> : <span style={{ fontSize: 9, fontWeight: 800, color: i === passo ? '#fff' : 'var(--gray-400)' }}>{i + 1}</span>}
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.3, marginBottom: 3 }}>{p.nome}</div>
-                <div style={{ fontSize: 10, color: 'var(--gray-400)', marginBottom: 8 }}>{p.categoria}</div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid var(--gray-200)', borderRadius: 50, overflow: 'hidden' }}>
-                    <button onClick={() => onUpdateQty(p.id, -1)} style={{ width: 26, height: 26, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Minus size={10} /></button>
-                    <span style={{ width: 24, textAlign: 'center', fontSize: 12, fontWeight: 700 }}>{quantidade}</span>
-                    <button onClick={() => onUpdateQty(p.id, 1)} style={{ width: 26, height: 26, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Plus size={10} /></button>
-                  </div>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--red-600)' }}>{fmt(p.precoNum * quantidade)}</span>
-                </div>
-              </div>
-              <button onClick={() => onRemove(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-400)', alignSelf: 'flex-start', padding: 4 }}
-                onMouseEnter={e => e.currentTarget.style.color = 'var(--red-600)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}><X size={14} /></button>
+              <span style={{ fontSize: 9, fontWeight: 700, color: i === passo ? 'var(--red-600)' : i < passo ? 'var(--green-600)' : 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: 0.4 }}>{s}</span>
+              {i < 2 && <div style={{ width: 14, height: 1, background: 'var(--gray-200)' }} />}
             </div>
           ))}
         </div>
-        {itens.length > 0 && (
-          <div style={{ padding: '16px 20px', borderTop: '1px solid var(--gray-200)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <span style={{ fontSize: 13, color: 'var(--gray-600)' }}>Total ({itens.reduce((s,i) => s+i.quantidade,0)} itens)</span>
-              <span style={{ fontSize: 18, fontWeight: 900, color: 'var(--red-600)' }}>{fmt(total)}</span>
-            </div>
-            <button className="btn-primary" style={{ width: '100%', padding: '13px', fontSize: 13, fontWeight: 800 }}>Finalizar Compra</button>
-            <button onClick={onClose} style={{ width: '100%', padding: '10px', fontSize: 12, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-600)', marginTop: 8 }}>Continuar a comprar</button>
+      </div>
+      <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-400)', padding: 4, display: 'flex' }}><X size={18} /></button>
+    </div>
+  );
+}
+
+function CarrinhoModal({ itens, onClose, onUpdateQty, onRemove }) {
+  const [passo, setPasso] = useState(0); // 0=carrinho 1=pagamento 2=confirmacao
+  const [metodoId, setMetodoId] = useState(null);
+  const [copiado, setCopiado] = useState(false);
+  const total = itens.reduce((s, i) => s + i.produto.precoNum * i.quantidade, 0);
+  const metodo = METODOS.find(m => m.id === metodoId);
+
+  const REF = '94 261 830 5';
+  const ENTIDADE = '21847';
+  const EMOLA_NUM = '84 848 8484';
+  const EMOLA_REF = 'MKT-' + Math.floor(10000 + Math.random() * 90000);
+
+  const copiar = (texto) => {
+    navigator.clipboard?.writeText(texto).catch(() => {});
+    setCopiado(true);
+    setTimeout(() => setCopiado(false), 2000);
+  };
+
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1000, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end' }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: 400, height: '100vh', background: '#fff', boxShadow: '-8px 0 40px rgba(0,0,0,0.15)', display: 'flex', flexDirection: 'column' }}>
+
+        {/* ── PASSO 0: Carrinho ── */}
+        {passo === 0 && <>
+          <PanelHeader titulo="Carrinho" onClose={onClose} passo={0} />
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            {itens.length === 0 && (
+              <div style={{ padding: 40, textAlign: 'center', color: 'var(--gray-400)', fontSize: 13 }}>
+                <ShoppingCart size={40} strokeWidth={1} style={{ margin: '0 auto 12px', display: 'block' }} />
+                <p>O carrinho está vazio</p>
+              </div>
+            )}
+            {itens.map(({ produto: p, quantidade }) => (
+              <div key={p.id} style={{ display: 'flex', gap: 12, padding: '14px 20px', borderBottom: '1px solid var(--gray-200)' }}>
+                <div style={{ width: 60, height: 60, borderRadius: 12, overflow: 'hidden', flexShrink: 0, background: 'var(--gray-100)' }}>
+                  <img src={p.imagem} alt={p.nome} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => e.target.style.display = 'none'} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, lineHeight: 1.3, marginBottom: 3 }}>{p.nome}</div>
+                  <div style={{ fontSize: 10, color: 'var(--gray-400)', marginBottom: 8 }}>{p.categoria}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', border: '1.5px solid var(--gray-200)', borderRadius: 50, overflow: 'hidden' }}>
+                      <button onClick={() => onUpdateQty(p.id, -1)} style={{ width: 26, height: 26, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Minus size={10} /></button>
+                      <span style={{ width: 24, textAlign: 'center', fontSize: 12, fontWeight: 700 }}>{quantidade}</span>
+                      <button onClick={() => onUpdateQty(p.id, 1)} style={{ width: 26, height: 26, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Plus size={10} /></button>
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 800, color: 'var(--red-600)' }}>{fmt(p.precoNum * quantidade)}</span>
+                  </div>
+                </div>
+                <button onClick={() => onRemove(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-400)', alignSelf: 'flex-start', padding: 4 }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--red-600)'} onMouseLeave={e => e.currentTarget.style.color = 'var(--gray-400)'}><X size={14} /></button>
+              </div>
+            ))}
           </div>
-        )}
+          {itens.length > 0 && (
+            <div style={{ padding: '16px 20px', borderTop: '1px solid var(--gray-200)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                <span style={{ fontSize: 13, color: 'var(--gray-600)' }}>Total ({itens.reduce((s,i) => s+i.quantidade,0)} itens)</span>
+                <span style={{ fontSize: 18, fontWeight: 900, color: 'var(--red-600)' }}>{fmt(total)}</span>
+              </div>
+              <button onClick={() => setPasso(1)} className="btn-primary" style={{ width: '100%', padding: '13px', fontSize: 13, fontWeight: 800 }}>
+                Finalizar Compra →
+              </button>
+              <button onClick={onClose} style={{ width: '100%', padding: '10px', fontSize: 12, fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gray-600)', marginTop: 8 }}>Continuar a comprar</button>
+            </div>
+          )}
+        </>}
+
+        {/* ── PASSO 1: Método de Pagamento ── */}
+        {passo === 1 && <>
+          <PanelHeader titulo="Método de Pagamento" onBack={() => setPasso(0)} onClose={onClose} passo={1} />
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+            <div style={{ fontSize: 12, color: 'var(--gray-500)', marginBottom: 16 }}>
+              Seleccione como pretende efectuar o pagamento de <strong style={{ color: 'var(--red-600)' }}>{fmt(total)}</strong>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {METODOS.map(m => {
+                const selected = metodoId === m.id;
+                return (
+                  <button
+                    key={m.id}
+                    onClick={() => setMetodoId(m.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 14,
+                      padding: '14px 16px', borderRadius: 12, textAlign: 'left',
+                      border: `2px solid ${selected ? 'var(--red-600)' : 'var(--gray-200)'}`,
+                      background: selected ? 'var(--red-50)' : 'var(--white)',
+                      cursor: 'pointer', transition: 'all 0.15s',
+                    }}
+                  >
+                    <m.Logo />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--black)', marginBottom: 3 }}>{m.nome}</div>
+                      <div style={{ fontSize: 11, color: 'var(--gray-500)', lineHeight: 1.4 }}>{m.desc}</div>
+                    </div>
+                    <div style={{ width: 20, height: 20, borderRadius: '50%', border: `2px solid ${selected ? 'var(--red-600)' : 'var(--gray-300)'}`, background: selected ? 'var(--red-600)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      {selected && <Check size={11} color="#fff" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div style={{ padding: '16px 20px', borderTop: '1px solid var(--gray-200)' }}>
+            <button
+              onClick={() => metodoId && setPasso(2)}
+              style={{ width: '100%', padding: '13px', fontSize: 13, fontWeight: 800, borderRadius: 50, border: 'none', cursor: metodoId ? 'pointer' : 'not-allowed', background: metodoId ? 'var(--red-600)' : 'var(--gray-200)', color: metodoId ? '#fff' : 'var(--gray-400)', transition: 'background 0.15s' }}
+            >
+              {metodoId ? `Confirmar com ${metodo.nome}` : 'Seleccione um método'}
+            </button>
+          </div>
+        </>}
+
+        {/* ── PASSO 2: Confirmação ── */}
+        {passo === 2 && <>
+          <PanelHeader titulo="Confirmação" onBack={() => setPasso(1)} onClose={onClose} passo={2} />
+          <div style={{ flex: 1, overflowY: 'auto', padding: '24px 20px' }}>
+            {/* Sucesso */}
+            <div style={{ textAlign: 'center', marginBottom: 24 }}>
+              <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'var(--green-50)', border: '3px solid var(--green-600)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                <CheckCircle size={28} color="var(--green-600)" />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 4 }}>Encomenda registada!</div>
+              <div style={{ fontSize: 12, color: 'var(--gray-500)' }}>Complete o pagamento para confirmar o seu pedido.</div>
+            </div>
+
+            {/* Resumo */}
+            <div style={{ background: 'var(--gray-100)', borderRadius: 10, padding: '12px 14px', marginBottom: 20 }}>
+              <div style={{ fontSize: 10, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--gray-500)', marginBottom: 8 }}>Resumo</div>
+              {itens.map(({ produto: p, quantidade }) => (
+                <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
+                  <span style={{ color: 'var(--gray-700)' }}>{p.nome} ×{quantidade}</span>
+                  <span style={{ fontWeight: 700 }}>{fmt(p.precoNum * quantidade)}</span>
+                </div>
+              ))}
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, fontWeight: 900, borderTop: '1px solid var(--gray-300)', marginTop: 8, paddingTop: 8, color: 'var(--red-600)' }}>
+                <span>Total</span><span>{fmt(total)}</span>
+              </div>
+            </div>
+
+            {/* Instruções por método */}
+            {metodoId === 'visa' && (
+              <div style={{ border: '1px solid var(--gray-200)', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: '#1A1F71', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <VisaLogo />
+                  <div>
+                    <div style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>Cartão Visa / Mastercard</div>
+                    <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11 }}>Pagamento seguro via 3D Secure</div>
+                  </div>
+                </div>
+                <div style={{ padding: '16px' }}>
+                  <div style={{ fontSize: 12, color: 'var(--gray-600)', lineHeight: 1.6, marginBottom: 12 }}>
+                    Será redireccionado para o portal seguro do seu banco para introduzir os dados do cartão. O processo é encriptado e certificado.
+                  </div>
+                  <button style={{ width: '100%', padding: '12px', background: '#1A1F71', color: '#fff', border: 'none', borderRadius: 50, fontSize: 13, fontWeight: 800, cursor: 'pointer' }}>
+                    Ir para pagamento seguro →
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {metodoId === 'referencia' && (
+              <div style={{ border: '1px solid var(--gray-200)', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: '#0A2D6E', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <AtmLogo />
+                  <div>
+                    <div style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>Referência Bancária</div>
+                    <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11 }}>Válida por 48 horas</div>
+                  </div>
+                </div>
+                <div style={{ padding: '16px' }}>
+                  {[
+                    { label: 'Entidade', value: ENTIDADE },
+                    { label: 'Referência', value: REF },
+                    { label: 'Valor', value: fmt(total) },
+                    { label: 'Prazo', value: '48 horas' },
+                  ].map(r => (
+                    <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderBottom: '1px solid var(--gray-100)' }}>
+                      <span style={{ fontSize: 11, color: 'var(--gray-500)', fontWeight: 600 }}>{r.label}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 13, fontWeight: 800, fontFamily: r.label === 'Referência' || r.label === 'Entidade' ? 'monospace' : 'inherit', color: 'var(--black)' }}>{r.value}</span>
+                        {(r.label === 'Referência' || r.label === 'Entidade') && (
+                          <button onClick={() => copiar(r.value)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copiado ? 'var(--green-600)' : 'var(--gray-400)', padding: 2, display: 'flex' }}>
+                            {copiado ? <Check size={13} /> : <Copy size={13} />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 12, padding: '10px 12px', background: 'var(--gray-100)', borderRadius: 8, fontSize: 11, color: 'var(--gray-600)', lineHeight: 1.5 }}>
+                    Aceda ao ATM ou homebanking e seleccione <strong>Pagamento de Serviços</strong>. Introduza a entidade e referência acima.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {metodoId === 'emola' && (
+              <div style={{ border: '1px solid var(--gray-200)', borderRadius: 12, overflow: 'hidden' }}>
+                <div style={{ background: '#E30613', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <EmolhLogo />
+                  <div>
+                    <div style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>E-mola — Vodacom</div>
+                    <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11 }}>Pagamento móvel imediato</div>
+                  </div>
+                </div>
+                <div style={{ padding: '16px' }}>
+                  {[
+                    { label: 'Número E-mola', value: EMOLA_NUM, copy: true },
+                    { label: 'Referência', value: EMOLA_REF, copy: true },
+                    { label: 'Valor a enviar', value: fmt(total), copy: false },
+                  ].map(r => (
+                    <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 0', borderBottom: '1px solid var(--gray-100)' }}>
+                      <span style={{ fontSize: 11, color: 'var(--gray-500)', fontWeight: 600 }}>{r.label}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span style={{ fontSize: 13, fontWeight: 800, fontFamily: r.copy ? 'monospace' : 'inherit', color: 'var(--black)' }}>{r.value}</span>
+                        {r.copy && (
+                          <button onClick={() => copiar(r.value)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: copiado ? 'var(--green-600)' : 'var(--gray-400)', padding: 2, display: 'flex' }}>
+                            {copiado ? <Check size={13} /> : <Copy size={13} />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div style={{ marginTop: 12, padding: '10px 12px', background: '#FFF0F0', borderRadius: 8, fontSize: 11, color: '#C00', lineHeight: 1.5 }}>
+                    No seu telemóvel marque <strong>*880#</strong>, escolha <strong>Pagar Serviços</strong> e introduza o número e referência acima.
+                  </div>
+                  <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', gap: 7, padding: '10px 12px', background: 'var(--gray-100)', borderRadius: 8 }}>
+                    <Smartphone size={14} color="var(--gray-500)" />
+                    <span style={{ fontSize: 11, color: 'var(--gray-600)' }}>Também pode usar a app E-mola para pagar.</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div style={{ padding: '14px 20px', borderTop: '1px solid var(--gray-200)' }}>
+            <button onClick={onClose} style={{ width: '100%', padding: '12px', fontSize: 13, fontWeight: 700, borderRadius: 50, border: '1.5px solid var(--gray-200)', background: 'var(--white)', color: 'var(--gray-700)', cursor: 'pointer' }}>
+              Fechar
+            </button>
+          </div>
+        </>}
       </div>
     </div>
   );
