@@ -1,5 +1,6 @@
 import { BookOpen, Play, CheckCircle, Clock, ChevronRight, AlertTriangle, Zap } from 'lucide-react';
 import { cursos, formacaoImportante } from '../data/mockData';
+import AnuncioCard from '../components/AnuncioCard';
 
 const nivelColors = {
   'Base': { bg: 'var(--green-50)', color: 'var(--green-800)' },
@@ -107,7 +108,9 @@ export default function Formacao({ setPage, mobile }) {
           </div>
         </div>
 
-        <div className="widget" style={{ padding: '16px' }}>
+        <div style={{ marginTop: 12 }}><AnuncioCard /></div>
+
+        <div className="widget" style={{ padding: '16px', marginTop: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 12 }}>Recursos de Apoio</div>
           {['Manual do Militante', 'Glossário Político', 'Cronograma de Formações'].map((r, i) => (
             <button key={i} style={{ display: 'flex', width: '100%', alignItems: 'center', gap: 8, padding: '8px 0', background: 'none', borderBottom: '1px solid var(--gray-200)', textAlign: 'left' }}

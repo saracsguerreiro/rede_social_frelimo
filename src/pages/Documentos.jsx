@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FileText, Download, Search, Star } from 'lucide-react';
 import { documentos, importantDocs } from '../data/mockData';
+import AnuncioCard from '../components/AnuncioCard';
 
 const tipoColors = {
   'Estatuto': { bg: 'var(--red-50)', color: 'var(--red-800)' },
@@ -115,7 +116,8 @@ export default function Documentos({ setPage, mobile }) {
 
       {/* Coluna direita — Documentos importantes */}
       {!mobile && <div style={{ width: 260, flexShrink: 0 }}>
-        <div className="widget">
+        <AnuncioCard />
+        <div className="widget" style={{ marginTop: 12 }}>
           <div className="widget-header">
             <div className="widget-title">
               <Star size={14} color="var(--yellow)" fill="var(--yellow)" />

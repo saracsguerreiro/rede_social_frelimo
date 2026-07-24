@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Clock, MapPin, CheckCircle, Circle, ChevronLeft, ChevronRight, CalendarCheck, History } from 'lucide-react';
 import { eventos, eventosAnteriores } from '../data/mockData';
+import AnuncioCard from '../components/AnuncioCard';
 
 const tipoConfig = {
   cc:          { label: 'Comité Central', borda: 'var(--red-600)',   bg: 'var(--red-50)',   cor: 'var(--red-800)' },
@@ -243,8 +244,10 @@ export default function Eventos({ setPage, mobile }) {
           )}
         </div>
 
+        <div style={{ marginTop: 12 }}><AnuncioCard /></div>
+
         {/* Eventos anteriores */}
-        <div className="widget" style={{ marginTop: 16 }}>
+        <div className="widget" style={{ marginTop: 12 }}>
           <div className="widget-header">
             <div className="widget-title">
               <History size={14} color="var(--gray-500)" />

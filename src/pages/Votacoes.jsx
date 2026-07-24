@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { CheckCircle, Clock, Lock, Users, TrendingUp, Award } from 'lucide-react';
 import { votacoes as initialVotacoes } from '../data/mockData';
 import AnunciosSidebar from '../components/AnunciosSidebar';
+import AnuncioCard from '../components/AnuncioCard';
 
 export default function Votacoes({ setPage, mobile }) {
   const [votacoes, setVotacoes] = useState(initialVotacoes);
@@ -163,7 +164,8 @@ export default function Votacoes({ setPage, mobile }) {
             ))}
           </div>
         </div>
-        <div className="widget" style={{ padding: '16px' }}>
+        <div style={{ marginTop: 12 }}><AnuncioCard /></div>
+        <div className="widget" style={{ padding: '16px', marginTop: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 10 }}>Participação por Órgão</div>
           {[
             { orgao: 'Comité Central', pct: 74 },
